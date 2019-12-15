@@ -5,7 +5,7 @@
     <p>This is the home page.</p>
 
     <?php if (isset($_SESSION['user'])): ?>
-        <p>Welcome, <?php echo $_SESSION['user']['name']; ?>!</p>
+        <p>Welcome, <?php echo $_SESSION['user']['firstname']; ?>!</p>
     <?php endif; ?>
 </article>
 
