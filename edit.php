@@ -16,6 +16,7 @@
                 <?php else : ?>
                     <?php $avatarPath = '/app/database/avatars/'.$avatar['name']; ?>
                     <?php move_uploaded_file($avatar['tmp_name'], __DIR__.$avatarPath); ?>
+                    <?php $_SESSION['avatar'] = $avatarPath; ?>
                 <?php endif; ?>
                 <img class='upload-image' src="<?= $avatarPath; ?>" alt="<?= $_SESSION['user']['username']; ?>">    
             <?php endif; ?>

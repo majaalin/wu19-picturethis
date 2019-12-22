@@ -1,5 +1,14 @@
 /* In this file you can add your custom styles. */
 
-.upload-image {
+.upload-image, .avatar {
     width: 20vw;
+}
+
+.avatarAndProfileData {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.post-follow-item {
+    font-size: 6px;
 }
