@@ -12,9 +12,11 @@
             FOLLOWERS
             FOLLOWING -->
         </div>
-        <h6 class='name'><?php echo $_SESSION['user']['firstname'] . ' ' . $_SESSION['user']['lastname']; ?></h6>
+        <h6 class='username'><?php echo $_SESSION['user']['username']; ?></h6>
         <h6 class='bio'><?php echo $_SESSION['user']['bio']; ?></h6>
-        <button class = 'editProfile'>Edit Profile</button>
+        <form action="/edit.php">
+            <button type='submit' class='editProfileButton'>Edit Profile</button>
+        </form> 
     <?php endif; ?>
 </article>
 
