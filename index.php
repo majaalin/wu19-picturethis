@@ -6,6 +6,15 @@
 
     <?php if (isset($_SESSION['user'])): ?>
         <p>Welcome, <?php echo $_SESSION['user']['firstname']; ?>!</p>
+        <div class='avatarAndProfileData'>
+            <!-- <img src="<?php echo $_SESSION['avatar']; ?>" alt="<?php echo $_SESSION['user']['username']; ?>">
+            POSTS
+            FOLLOWERS
+            FOLLOWING -->
+        </div>
+        <h6 class='name'><?php echo $_SESSION['user']['firstname'] . ' ' . $_SESSION['user']['lastname']; ?></h6>
+        <h6 class='bio'><?php echo $_SESSION['user']['bio']; ?></h6>
+        <button class = 'editProfile'>Edit Profile</button>
     <?php endif; ?>
 </article>
 

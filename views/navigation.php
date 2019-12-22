@@ -15,6 +15,9 @@
         <li class="nav-item">
             <a class="nav-link" href="/app/users/logout.php">Logout</a>
         </li><!-- /nav-item -->
+        <li class="nav-item">
+            <a class="nav-link" href="/app/users/delete.php">Delete Account</a>
+        </li><!-- /nav-item -->
         <?php else: ?>
         <li class="nav-item">
             <a class="nav-link <?php echo $_SERVER['SCRIPT_NAME'] === '/login.php' ? 'active' : ''; ?>" href="login.php">Login</a>

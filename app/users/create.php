@@ -1,19 +1,19 @@
 <?php
 declare(strict_types=1);
 require __DIR__.'/../autoload.php';
-// In this file we login users.
+// In this file we create an account and login users.
 
 // Check if both email and password exists in the POST request.
 if (isset($_POST['firstname'],$_POST['lastname'],$_POST['username'],$_POST['bio'],$_POST['email'], $_POST['password'])) {
     $firstname = trim(filter_var($_POST['firstname'], FILTER_SANITIZE_STRING));
-    $lastname = trim(filter_var($_POST['firstname'], FILTER_SANITIZE_STRING));
+    $lastname = trim(filter_var($_POST['lastname'], FILTER_SANITIZE_STRING));
     $username = trim(filter_var($_POST['username'], FILTER_SANITIZE_STRING));
     $email = trim(filter_var($_POST['email'], FILTER_SANITIZE_EMAIL));
     $htmlPassword = trim(htmlentities($_POST['password']));
     $password = password_hash($htmlPassword, PASSWORD_DEFAULT);
     // password_verify($passphrase, $hash); // true
     if(isset($_POST['bio'])) {
-        $bio = trim(filter_var($_POST['username'], FILTER_SANITIZE_STRING));
+        $bio = trim(filter_var($_POST['bio'], FILTER_SANITIZE_STRING));
     } else {
         $bio = "";
     }
