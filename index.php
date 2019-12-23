@@ -8,7 +8,7 @@
         <p>Welcome, <?php echo $_SESSION['user']['firstname']; ?>!</p>
         <div class='avatarAndProfileData'>
             <?php if(isset($_SESSION['avatar'])) : ?>
-            <img class='avatar' src="<?php echo $_SESSION['avatar']; ?>" alt="<?php echo $_SESSION['user']['username']; ?>">
+            <img class='avatar' src="<?php echo '/app/database/avatars/' . $_SESSION['avatar']; ?>" alt="<?php echo $_SESSION['user']['username']; ?>">
             <?php endif; ?>
             <div class=post-follow-item>
                 <h6>POSTS</h6>
