@@ -56,4 +56,4 @@ if (isset($_POST['firstname'],$_POST['lastname'],$_POST['username'],$_POST['bio'
 }
 // We should put this redirect in the end of this file since we always want to
 // redirect the user back from this file. We don't know
-redirect('/');
+redirect('/home.php');

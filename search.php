@@ -2,9 +2,11 @@
 
 <article>
     <h1><?php echo $config['title']; ?></h1>
-    <p>This is the title page.</p>
+    <p>This is the search page.</p>
 
     <?php if (isset($_SESSION['user'])) : ?>
-        <p>Welcome, <?php echo $_SESSION['user']['firstname']; ?>!</p>
+        <p>Welcome, <?php echo $_SESSION['user']['firstname']; ?>, to the search page!</p>
     <?php endif; ?>
 </article>
+
+<?php require __DIR__.'/views/footer.php'; ?>

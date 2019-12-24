@@ -29,4 +29,4 @@ if (isset($_POST['email'], $_POST['password'])) {
 }
 // We should put this redirect in the end of this file since we always want to
 // redirect the user back from this file. 
-redirect('/');
+redirect('/home.php');

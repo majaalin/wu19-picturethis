@@ -76,4 +76,4 @@ if($_SESSION['avatar']) {
 $_SESSION['user']['email'] = $newEmail;
 $_SESSION['user']['username'] = $newUsername;
 $_SESSION['user']['bio'] = $newBio;
-redirect('/');
+redirect('/home.php');
