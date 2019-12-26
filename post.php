@@ -1,12 +1,18 @@
 <?php require __DIR__.'/views/header.php'; ?>
 
-<article>
-    <h1><?php echo $config['title']; ?></h1>
-    <p>This is the post page.</p>
+<form action="app/posts/store.php" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="post-text">Caption</label>
+            <input class="form-control" type="caption" name="caption">
+            <small class="form-text text-muted">Please enter a caption.</small>
+        </div><!-- /form-group -->
+        
+        <div class="form-group">
+            <label for="post">Select an to post.</label>
+            <input type="file" accept=".jpg, .jpeg, .png" name="post" id="post" required> 
+        </div>
 
-    <?php if (isset($_SESSION['user'])) : ?>
-        <p>Welcome, <?php echo $_SESSION['user']['firstname']; ?>, to the post page!</p>
-    <?php endif; ?>
-</article>
+        <button type="submit">Upload</button>
+    </form>
 
 <?php require __DIR__.'/views/footer.php'; ?>
