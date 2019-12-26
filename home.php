@@ -6,6 +6,8 @@
         <div class='avatarAndProfileData'>
             <?php if(isset($_SESSION['avatar'])) : ?>
             <img class='avatar' src="<?php echo '/app/database/avatars/' . $_SESSION['avatar']; ?>" alt="<?php echo $_SESSION['user']['username']; ?>">
+            <?php else : ?>
+            <img class='avatar' src="<?php echo '/assets/icons/noprofile.png'; ?>" alt="noprofile">
             <?php endif; ?>
             <div class=post-follow-item>
                 <h6>POSTS</h6>

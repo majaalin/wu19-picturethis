@@ -2,24 +2,30 @@
 declare(strict_types=1);
 require __DIR__.'/../autoload.php';
 // In this file we logout a user and delete an account.
-$username = $_SESSION['user']['username'];
-var_dump($username);
+$id = intval($_SESSION['user']['id']);
+var_dump($id);
 
-$queryDelete = sprintf("DELETE FROM users WHERE username = :username");
-$statement = $pdo->prepare($queryDelete);
-$statement->bindParam(':username', $username, PDO::PARAM_STR);
+// Delete user
+$queryDeleteUser = sprintf("DELETE FROM users WHERE id = :id");
+$statement = $pdo->prepare($queryDeleteUser);
+$statement->bindParam(':id', $id, PDO::PARAM_INT);
 $statement->execute();
 
+// Delete posts
+$queryDeletePosts = sprintf("DELETE FROM posts WHERE user_id = :user_id");
+$statement = $pdo->prepare($queryDeletePosts);
+$statement->bindParam(':user_id', $id, PDO::PARAM_INT);
+$statement->execute();
+
+// Delete avatar
 if($_SESSION['avatar']) {
-    $queryDelete = sprintf("DELETE FROM avatars WHERE username = :username");
-    $statement = $pdo->prepare($queryDelete);
-    $statement->bindParam(':username', $username, PDO::PARAM_STR);
+    $queryDeleteAvatar = sprintf("DELETE FROM avatars WHERE avatar_id = :avatar_id");
+    $statement = $pdo->prepare($queryDeleteAvatar);
+    $statement->bindParam(':avatar_id', $id, PDO::PARAM_INT);
     $statement->execute();
     unlink(__DIR__.'/app/database/avatars/'.$_SESSION['avatar']);
     unset($_SESSION['avatar']);
 }
-
-// DELETE ALL POSTS AND COMMENTS
 
 unset($_SESSION['user']);
 redirect('/');
