@@ -26,7 +26,7 @@
         <h6 class='bio'><?php echo $_SESSION['user']['bio']; ?></h6>
         <form action="/edit.php">
             <button type='submit' class='editProfileButton'>Edit Profile</button>
-        </form> 
+        </form>
     <?php endif; ?>
 </article>
 
