@@ -19,7 +19,8 @@ $posts = $statement->fetchAll(PDO::FETCH_ASSOC);
 
 foreach ($posts as $post) {
     $postPath = $post['post_image'];
-    unlink(__DIR__.'/app/database/posts/'.$postPath);
+    var_dump($postPath);
+    unlink(__DIR__.'/../database/posts/'.$postPath);
 }
 
 $queryDeletePosts = sprintf("DELETE FROM posts WHERE user_id = :user_id");
@@ -33,9 +34,10 @@ if($_SESSION['avatar']) {
     $statement = $pdo->prepare($queryDeleteAvatar);
     $statement->bindParam(':avatar_id', $id, PDO::PARAM_INT);
     $statement->execute();
-    unlink(__DIR__.'/app/database/avatars/'.$_SESSION['avatar']);
+    unlink(__DIR__.'/../database/avatars/'.$_SESSION['avatar']);
+    var_dump($_SESSION['avatar']);
     unset($_SESSION['avatar']);
 }
-
+// die(var_dump($id));
 unset($_SESSION['user']);
 redirect('/');
