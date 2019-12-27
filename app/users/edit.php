@@ -51,6 +51,7 @@ if(isset($_POST['email'],$_POST['username'],$_POST['bio'])) {
                 ':post_id' => $postId,
                 ':new_image' => $newImage
             ]);
+            rename('../database/posts/'.$oldImage,'../database/posts/'.$newImage);
         }
     }
 
@@ -78,7 +79,6 @@ if($_SESSION['avatar']) {
             ]);
             
             rename('../database/avatars/'.$_SESSION['avatar'],'../database/avatars/'.$image);
-            // unlink(__DIR__.'/app/database/avatars/'.$_SESSION['avatar']);
             $_SESSION['avatar'] = $image;
         } else {
             $queryUpdateAvatar = 'UPDATE avatars SET username = :username, image = :image WHERE avatar_id = :id';
@@ -90,7 +90,6 @@ if($_SESSION['avatar']) {
             ]);
             
             rename('../database/avatars/'.$_SESSION['avatar'],'../database/avatars/'.$image);
-            // unlink(__DIR__.'/app/database/avatars/'.$_SESSION['avatar']);
             $_SESSION['avatar'] = $image;
         }
     }
