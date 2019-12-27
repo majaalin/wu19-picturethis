@@ -31,6 +31,29 @@ if(isset($_POST['email'],$_POST['username'],$_POST['bio'])) {
         ':bio' => $newBio,
         ':id' => $id
     ]);
+
+    if($newUsername) {
+        $queryFetchPosts = 'SELECT * FROM posts WHERE user_id = :user_id';
+        $statement = $pdo->prepare($queryFetchPosts);
+        $statement->bindParam(':user_id', $id, PDO::PARAM_INT);
+        $statement->execute();
+        $posts = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach ($posts as $post) {
+            $oldImage = $post['post_image'];
+            $postId = $post['post_id'];
+            $oldNumExtension = str_replace($oldUsername, "", $oldImage);
+            $tempArray = [$newUsername, $oldNumExtension];
+            $newImage = implode("",$tempArray);
+            $queryUpdatePost = 'UPDATE posts SET post_image = :new_image WHERE post_id = :post_id';
+            $statement = $pdo->prepare($queryUpdatePost);
+            $statement->execute([
+                ':post_id' => $postId,
+                ':new_image' => $newImage
+            ]);
+        }
+    }
+
 }
     
 if($_SESSION['avatar']) {

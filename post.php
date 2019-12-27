@@ -2,13 +2,12 @@
 
 <form action="app/posts/store.php" method="post" enctype="multipart/form-data">
         <div class="form-group">
-            <label for="caption">Caption</label>
+            <label for="caption">Post Caption</label>
             <input class="form-control" type="text" name="caption">
-            <small class="form-text text-muted">Please enter a caption.</small>
+            <small class="form-text text-muted">Please enter a caption to accompany your post.</small>
         </div><!-- /form-group -->
         
         <div class="form-group">
-            <label for="post">Select an to post.</label>
             <input type="file" accept=".jpg, .jpeg, .png" name="post" id="post" required> 
         </div>
 

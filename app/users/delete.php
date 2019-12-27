@@ -3,7 +3,6 @@ declare(strict_types=1);
 require __DIR__.'/../autoload.php';
 // In this file we logout a user and delete an account.
 $id = intval($_SESSION['user']['id']);
-var_dump($id);
 
 // Delete user
 $queryDeleteUser = sprintf("DELETE FROM users WHERE id = :id");
@@ -12,6 +11,17 @@ $statement->bindParam(':id', $id, PDO::PARAM_INT);
 $statement->execute();
 
 // Delete posts
+$queryFetchPosts = 'SELECT * FROM posts WHERE user_id = :user_id';
+$statement = $pdo->prepare($queryFetchPosts);
+$statement->bindParam(':user_id', $id, PDO::PARAM_INT);
+$statement->execute();
+$posts = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+foreach ($posts as $post) {
+    $postPath = $post['post_image'];
+    unlink(__DIR__.'/app/database/posts/'.$postPath);
+}
+
 $queryDeletePosts = sprintf("DELETE FROM posts WHERE user_id = :user_id");
 $statement = $pdo->prepare($queryDeletePosts);
 $statement->bindParam(':user_id', $id, PDO::PARAM_INT);

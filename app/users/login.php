@@ -25,6 +25,12 @@ if (isset($_POST['email'], $_POST['password'])) {
         // Remember to not save the password in the session!
         unset($user['password']);
         $_SESSION['user'] = $user;
+        $statement = $pdo->prepare('SELECT * FROM avatars WHERE avatar_id = :avatar_id');
+        $statement->bindParam(':avatar_id', $user['id'], PDO::PARAM_INT);
+        $statement->execute();
+        // Fetch the user as an associative array.
+        $avatar = $statement->fetch(PDO::FETCH_ASSOC);
+        $_SESSION['avatar'] = $avatar['image'];
     }
 }
 // We should put this redirect in the end of this file since we always want to

@@ -10,16 +10,19 @@
             <img class='avatar' src="<?php echo '/assets/icons/noprofile.png'; ?>" alt="noprofile">
             <?php endif; ?>
             <div class=post-follow-item>
+                <h5>0</h5>
                 <h6>POSTS</h6>
             </div>
             <div class=post-follow-item>
+                <h5>0</h5>
                 <h6>FOLLOWERS</h6>
             </div>
             <div class=post-follow-item>
+                <h5>0</h5>
                 <h6>FOLLOWING</h6>
             </div>
         </div>
-        <h6 class='username'><?php echo $_SESSION['user']['username']; ?></h6>
+        <h5 class='username'><?php echo $_SESSION['user']['username']; ?></h5>
         <h6 class='bio'><?php echo $_SESSION['user']['bio']; ?></h6>
         <form action="/edit.php">
             <button type='submit' class='editProfileButton'>Edit Profile</button>

@@ -30,6 +30,31 @@ article {
     background-color: lightgrey;
 }
 
+.editProfileButton {
+    margin: 0 auto;
+    width: 100%;
+    padding: 0;
+    border: 1px black solid;
+    border-radius: 5px;
+}
+
+.post-follow-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.post-follow-item h6, h5 {
+    margin: 0;
+}
+
+button {
+    padding: 0 15px;
+    border: 1px black solid;
+    border-radius: 5px;
+}
+
 img {
     width: 32px;
     margin: 15px 0;
