@@ -57,21 +57,21 @@
 
     <form action="app/users/edit.php" method="post">
         <div class="form-group">
-            <label for="email">Email</label>
+            <label for="email">Email:</label>
             <input class="form-control" type="email" name="email" placeholder="<?= $_SESSION['user']['email']; ?>">
-            <small class="form-text text-muted">Please provide the your email.</small>
+            <small class="form-text text-muted">What's your email?</small>
         </div><!-- /form-group -->
 
         <div class="form-group">
-            <label for="username">Username</label>
+            <label for="username">Username:</label>
             <input class="form-control" type="username" name="username" placeholder="<?= $_SESSION['user']['username']; ?>">
-            <small class="form-text text-muted">Please provide the your username.</small>
+            <small class="form-text text-muted">Now how about your username?</small>
         </div><!-- /form-group -->
 
         <div class="form-group">
-            <label for="bio">Bio</label>
+            <label for="bio">Bio:</label>
             <input class="form-control" type="bio" name="bio" placeholder="<?= $_SESSION['user']['bio']; ?>">
-            <small class="form-text text-muted">Please provide the your username.</small>
+            <small class="form-text text-muted">Want to have a tagline?</small>
         </div><!-- /form-group -->
 
         <div class = 'buttons'>

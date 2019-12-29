@@ -26,4 +26,8 @@
 
     </ul><!-- /navbar-nav -->
 
+    <div class="menu-large">
+        <img src="/assets/icons/menu_large.svg" alt="menu">
+    </div>
+
 </nav><!-- /navbar -->

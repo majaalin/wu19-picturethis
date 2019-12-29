@@ -19,3 +19,5 @@
         <button type="submit" class="btn btn-primary">Login</button>
     </form>
 </article>
+
+<?php require __DIR__.'/views/footer.php'; ?>
