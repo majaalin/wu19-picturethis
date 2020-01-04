@@ -18,12 +18,6 @@ footerATags.forEach(element => {
     }
 });
 
-function postPopUp() {
-    var popup = document.getElementById("postPopUp");
-    popup.classList.toggle("show");
-}
-
-
 const navSlide = () => {
     const menu = document.querySelector('.menu-large');
     const nav = document.querySelector('.navbar-nav');

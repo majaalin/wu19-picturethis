@@ -3,6 +3,8 @@ declare(strict_types=1);
 require __DIR__.'/../autoload.php';
 // In this file we login users.
 
+$errors = [];
+
 // Check if both email and password exists in the POST request.
 if (isset($_POST['email'], $_POST['password'])) {
     $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
@@ -15,6 +17,7 @@ if (isset($_POST['email'], $_POST['password'])) {
     // If we couldn't find the user in the database, redirect back to the login
     // page with our custom redirect function.
     if (!$user) {
+        $errors[] = 'You\'ve entered the wrong email address or password. Have you created an account yet?';
         redirect('/login.php');
     }
     // If we found the user in the database, compare the given password from the

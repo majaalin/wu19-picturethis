@@ -29,7 +29,7 @@ if (isset($_FILES['post'])) {
     $posts = $statement->fetchAll(PDO::FETCH_ASSOC);
     
     if(empty($posts)) {
-        $postPath = $user['username'] . '1.' . $extension[1]; // Define the path of the post for the first post by this user
+        $postPath = $user['username'] . '-1.' . $extension[1]; // Define the path of the post for the first post by this user
         move_uploaded_file($post['tmp_name'], __DIR__.'/../database/posts/'.$postPath);
 
         $queryInsertPost = 'INSERT INTO posts (user_id, post_text, post_image, datetime) VALUES (:user_id, :post_text, :post_image, :datetime)';
@@ -44,11 +44,11 @@ if (isset($_FILES['post'])) {
         for ($i = count($posts); $i >= count($posts); $i--) {
             $username = $user['username'];
             $lastPostExtension = explode('.', $posts[$i-1]['post_image']);
-            $lastPostNumber = explode("$username", $lastPostExtension[0]);
+            $lastPostNumber = explode("$username-", $lastPostExtension[0]);
             $postNumber = $lastPostNumber[1] + 1;
         };
 
-        $postPath = $user['username'] . $postNumber . '.' . $extension[1]; // Define the path of the post based on the number of previous posts.
+        $postPath = $user['username'] . '-' . $postNumber . '.' . $extension[1]; // Define the path of the post based on the number of previous posts.
         move_uploaded_file($post['tmp_name'], __DIR__.'/../database/posts/'.$postPath);
 
         $queryInsertPost = 'INSERT INTO posts (user_id, post_text, post_image, datetime) VALUES (:user_id, :post_text, :post_image, :datetime)';

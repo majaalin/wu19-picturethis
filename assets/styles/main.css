@@ -91,7 +91,7 @@ button {
     justify-content: space-between;
 }
 
-.post-user {
+.post-header {
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -167,4 +167,8 @@ button {
 .py-5 {
     padding-top: 9vh!important;
     padding-bottom: 1rem!important;
+}
+
+.hide {
+    display: none;
 }

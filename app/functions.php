@@ -23,12 +23,34 @@ if (!function_exists('getPosts')) {
      * @param PDO $pdo
      * @return array
      */
-    function getPosts(int $userID, PDO $pdo): array
+    function getPostsByUser(int $userID, PDO $pdo): array
     {
         $statement = $pdo->prepare('SELECT * FROM posts WHERE user_id = :user_id ORDER BY datetime DESC');
         $statement->bindParam(':user_id', $userID, PDO::PARAM_INT);
         $statement->execute();
         $posts = $statement->fetchAll(PDO::FETCH_ASSOC);
+        if($posts===false) {
+            $posts = [];
+        }
+        return $posts;
+    }
+}
+
+if (!function_exists('getAllPosts')) {
+    /**
+     * Get all posts 
+     * 
+     * @param PDO $pdo
+     * @return array
+     */
+    function getAllPosts(PDO $pdo): array
+    {
+        $statement = $pdo->prepare('SELECT * FROM posts ORDER BY datetime DESC');
+        $statement->execute();
+        $posts = $statement->fetchAll(PDO::FETCH_ASSOC);
+        if($posts===false) {
+            $posts = [];
+        }
         return $posts;
     }
 }
@@ -51,5 +73,26 @@ if (!function_exists('getAvatar')) {
             $avatar = [];
         }
         return $avatar;
+    }
+}
+
+if (!function_exists('getUserByID')) {
+    /**
+     * Get User by user ID
+     *
+     * @param int $userID
+     * @param PDO $pdo
+     * @return array
+     */
+    function getUserByID(int $userID, PDO $pdo): array
+    {
+        $statement = $pdo->prepare('SELECT * FROM users WHERE id = :id');
+        $statement->bindParam(':id', $userID, PDO::PARAM_INT);
+        $statement->execute();
+        $user = $statement->fetch(PDO::FETCH_ASSOC);
+        if($user===false) {
+            $user = [];
+        }
+        return $user;
     }
 }
