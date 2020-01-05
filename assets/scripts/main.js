@@ -45,5 +45,11 @@ const navSlide = () => {
 
 }
 
+function getScrolledURL(pagey) {
+    let scrolledURL = window.location.href.split('?')[0] + '?page_y=' + pagey;
+    return scrolledURL;
+}
+
 navSlide();
+
 

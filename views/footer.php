@@ -1,4 +1,4 @@
-    </div><!-- /container -->
+</div><!-- /container -->
 
     <div class='footer-icons'>
         <a href="feed.php"><img class="footer-img" src="/../assets/icons/feed_inactive.svg" class='feed'></a>

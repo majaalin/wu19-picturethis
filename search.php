@@ -62,6 +62,14 @@
         $avatar = getAvatar($id, $pdo); 
         $usernameArray = explode('-',$post['post_image']);
         $username = $usernameArray[0]; ?>
+
+        <?php $statement = $pdo->prepare("SELECT * FROM likes WHERE user_id = :user_id AND post_id = :post_id");
+        $statement->execute([
+            ":user_id" => $_SESSION["user"]["id"],
+            ":post_id" => $post["post_id"]
+        ]);
+        $liked = $statement->fetch(PDO::FETCH_ASSOC); ?>
+
         <div class = "<?= $username; ?>-post post">
             
             <form id="<?= $post['post_id']; ?>" action="app/posts/searchUser.php" method="post">
@@ -71,17 +79,26 @@
                     <h5 id="<?= $post['post_id']; ?>" class="post-user"><?= $username ?></h5>
                 </div>
             </form>
+
             <img class = "post-img"  src="<?= '/app/database/posts/' . $post['post_image']; ?>" alt="post">
-            <div class = "like-comment-strip">
-                <a href="#"><img class = "like-comment" src="/assets/icons/like_inactive.svg" alt="like"></a>
-                <a href="#"><img class = "like-comment" src="/assets/icons/comment.svg" alt="comment"></a>
-            </div>
+            
+            <form id="<?= $post['post_id']; ?>-like" action="app/posts/<?= ($liked) ? "removeLike.php" : "like.php"; ?>" method="post">
+                <input type="hidden" name="post-id" value="<?= $post['post_id']; ?>">
+                <input type="hidden" name="liked-user-id" value="<?= $id; ?>">
+                <input type="hidden" name="return-url" id="<?= $post['post_id']; ?>-return" value="">    
+                <div onclick="document.getElementById('<?= $post['post_id']; ?>-return').value = getScrolledURL(window.pageYOffset); document.getElementById('<?= $post['post_id']; ?>-like').submit();" class = "like-comment-strip">
+                    <img class = "like-comment" src="/assets/icons/<?= ($liked) ? "like_active.png" : "like_inactive.svg"; ?>" alt="like">
+                    <a href="#"><img class = "like-comment" src="/assets/icons/comment.svg" alt="comment"></a>
+                </div>
+            </form>
+
             <?php if($post['post_text']!=="") : ?>
                 <div class="comment-box">
                     <h5 class="comment-user"><?= $username; ?></h5>
                     <h6 class="comment"><?= $post['post_text'] ?></h6>
                 </div>
             <?php endif; ?>
+
         </div>
     <?php endforeach; ?>
 </article>
