@@ -1,5 +1,7 @@
 .upload-image, .avatar {
-    width: 20vw;
+    width: 90px;
+    height: 90px;
+    background: cover;
     border-radius: 50%;
     border: 2px solid black;
     padding: 2px;
@@ -25,6 +27,10 @@ h6 {
 
 .post-follow-item {
     font-size: 6px;
+}
+
+.edit-delete-icons {
+    display: flex;
 }
 
 article {
@@ -68,7 +74,8 @@ button {
 }
 
 .footer-img {
-    width: 32px;
+    width: 30px;
+    height: 30px;
     margin: 15px 0;
 }
 
@@ -80,6 +87,7 @@ button {
 
 .home-active {
     width: 30px;
+    height: 30px;
     border-radius: 50%;
     margin: 14px 0;
     padding: 1px;
@@ -93,7 +101,7 @@ button {
 
 .post-header {
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
     align-items: center;
 }
 
@@ -107,16 +115,27 @@ button {
 }
 
 .post-avatar {
-    width: 12%;
-    height: auto;
+    width: 38px;
+    height: 38px;
+    background: cover;
     margin: 0;
     border-radius: 50%;
     border-bottom: 1px solid lightgray;
 }
 
-.post-edit {
-    width: 18px;
+.post-delete, .post-edit {
+    width: 22px;
+    padding-left: 5px;
     margin: 0;
+}
+
+.edit-comment-button {
+    margin: 0;
+}
+
+.edit-comment-form {
+    display: flex;
+    justify-content: space-between;
 }
 
 .like-comment {
@@ -132,7 +151,8 @@ button {
 
 .comment-box {
     display: flex;
-    align-items: flex-end;
+    align-items: center;
+    line-height: normal;
 }
 
 .post-user {

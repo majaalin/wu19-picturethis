@@ -96,3 +96,26 @@ if (!function_exists('getUserByID')) {
         return $user;
     }
 }
+
+if (!function_exists('getLikesByPost')) {
+    /**
+     * Get User by user ID
+     *
+     * @param int $postID
+     * @param PDO $pdo
+     * @return array
+     */
+    function getLikesByPost(int $postID, PDO $pdo): array
+    {
+        $statement = $pdo->prepare("SELECT * FROM likes WHERE user_id = :user_id AND post_id = :post_id");
+        $statement->execute([
+            ":user_id" => $_SESSION["user"]["id"],
+            ":post_id" => $postID
+        ]);
+        $liked = $statement->fetch(PDO::FETCH_ASSOC);
+        if($liked===false) {
+            $liked = [];
+        }
+        return $liked;
+    }
+}

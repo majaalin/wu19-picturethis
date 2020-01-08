@@ -2,11 +2,10 @@
 
 <article>
     <h1><?php echo $config['title']; ?></h1>
-    <p>This is the activity page.</p>
-
-    <?php if (isset($_SESSION['user'])) : ?>
-        <p>Welcome, <?php echo $_SESSION['user']['firstname']; ?>, to the activity page!</p>
-    <?php endif; ?>
+    <p>Hi <?php echo $_SESSION['user']['firstname']; ?>!</p>
+    <p>This is the activity/notifications page.</p>
+    <p>Currently under development.</p>
+    <p>Cominig soon!</p>
 </article>
 
 <?php require __DIR__.'/views/footer.php'; ?>

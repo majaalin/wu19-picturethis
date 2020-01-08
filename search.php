@@ -29,20 +29,34 @@
     <h5 class='username'><?php echo $user['username']; ?></h5>
     <h6 class='bio'><?php echo $user['bio']; ?></h6>
 
-    <?php foreach ($posts as $post) : ?>
+    <?php foreach ($posts as $post) : 
+        $liked = getLikesByPost($post["post_id"], $pdo) ?>
         <?php $id = $post['user_id'];
         $usernameArray = explode('-',$post['post_image']);
         $username = $usernameArray[0]; ?>
         <div class = "<?= $username; ?>-post post">
-            <div class = "post-header">
-                <img class="post-avatar" src="<?= (isset($avatar) ? '/app/database/avatars/' . $avatar['image'] : '/assets/icons/noprofile.png'); ?>" alt="avatar">
-                <h5 class="post-user"><?= $username ?></h5>
+            <div class = 'post-header'>
+                <div class = "post-header">
+                    <img class="post-avatar" src="<?= (isset($avatar) ? '/app/database/avatars/' . $avatar['image'] : '/assets/icons/noprofile.png'); ?>" alt="avatar">
+                    <h5 class="post-user"><?= $username ?></h5>
+                </div>
+                <?php if($id===$_SESSION["user"]["id"]) : ?>
+                <div class="edit-delete-icons">
+                    <img class="post-edit" src="/assets/icons/edit.svg" alt="edit">
+                    <img class="post-delete" src="/assets/icons/delete.svg" alt="delete">
+                </div>
+                <?php endif; ?>
             </div>
             <img class = "post-img"  src="<?= '/app/database/posts/' . $post['post_image']; ?>" alt="post">
-            <div class = "like-comment-strip">
-                <a href="#"><img class = "like-comment" src="/assets/icons/like_inactive.svg" alt="like"></a>
-                <a href="#"><img class = "like-comment" src="/assets/icons/comment.svg" alt="comment"></a>
-            </div>
+            <form id="<?= $post['post_id']; ?>-like" action="app/posts/<?= ($liked) ? "removeLike.php" : "like.php"; ?>" method="post">
+                <input type="hidden" name="post-id" value="<?= $post['post_id']; ?>">
+                <input type="hidden" name="liked-user-id" value="<?= $id; ?>">
+                <input type="hidden" name="return-url" id="<?= $post['post_id']; ?>-return" value="">    
+                <div onclick="document.getElementById('<?= $post['post_id']; ?>-return').value = getScrolledURL(window.pageYOffset); document.getElementById('<?= $post['post_id']; ?>-like').submit();" class = "like-comment-strip">
+                    <img class = "like-comment" src="/assets/icons/<?= ($liked) ? "like_active.png" : "like_inactive.svg"; ?>" alt="like">
+                    <a href="#"><img class = "like-comment" src="/assets/icons/comment.svg" alt="comment"></a>
+                </div>
+            </form>
             <?php if($post['post_text']!=="") : ?>
                 <div class="comment-box">
                     <h5 class="comment-user"><?= $username; ?></h5>
@@ -61,24 +75,32 @@
         <?php $id = $post['user_id'];
         $avatar = getAvatar($id, $pdo); 
         $usernameArray = explode('-',$post['post_image']);
-        $username = $usernameArray[0]; ?>
-
-        <?php $statement = $pdo->prepare("SELECT * FROM likes WHERE user_id = :user_id AND post_id = :post_id");
-        $statement->execute([
-            ":user_id" => $_SESSION["user"]["id"],
-            ":post_id" => $post["post_id"]
-        ]);
-        $liked = $statement->fetch(PDO::FETCH_ASSOC); ?>
+        $username = $usernameArray[0]; 
+        $liked = getLikesByPost($post["post_id"], $pdo) ?>
 
         <div class = "<?= $username; ?>-post post">
-            
-            <form id="<?= $post['post_id']; ?>" action="app/posts/searchUser.php" method="post">
-                <input type="hidden" name="profileID" value="<?= $id; ?>">
-                <div onclick="document.getElementById('<?= $post['post_id']; ?>').submit();" class = "post-header">
-                    <img id="<?= $post['post_id']; ?>" class="post-avatar" src="<?= (isset($avatar) ? '/app/database/avatars/' . $avatar['image'] : '/assets/icons/noprofile.png'); ?>" alt="avatar">
-                    <h5 id="<?= $post['post_id']; ?>" class="post-user"><?= $username ?></h5>
-                </div>
-            </form>
+            <div class = 'post-header'>
+                <form id="<?= $post['post_id']; ?>" action="app/posts/searchUser.php" method="post">
+                    <input type="hidden" name="profileID" value="<?= $id; ?>">
+                    <div onclick="document.getElementById('<?= $post['post_id']; ?>').submit();" class = "post-header">
+                        <img id="<?= $post['post_id']; ?>" class="post-avatar" src="<?= (isset($avatar) ? '/app/database/avatars/' . $avatar['image'] : '/assets/icons/noprofile.png'); ?>" alt="avatar">
+                        <h5 id="<?= $post['post_id']; ?>" class="post-user"><?= $username ?></h5>
+                    </div>
+                </form>
+
+                <?php if($id===$_SESSION["user"]["id"]) : ?>
+                    <form id="<?= $post['post_id']; ?>-edit" action="#" method="post">
+                        <input type="hidden" name="post-id" value="<?= $post['post_id']; ?>">
+                        <input type="hidden" name="post-text" value="<?= $post['post_text']; ?>">
+                        <div class="edit-delete-icons">
+                            <div onclick="document.getElementById('<?= $post['post_id']; ?>-edit').submit();">
+                                <img class="post-edit" src="/assets/icons/edit.svg" alt="edit">
+                            </div>
+                            <img class="post-delete" src="/assets/icons/delete.svg" alt="delete">
+                        </div>
+                    </form>
+                <?php endif; ?>
+            </div>
 
             <img class = "post-img"  src="<?= '/app/database/posts/' . $post['post_image']; ?>" alt="post">
             
@@ -92,7 +114,20 @@
                 </div>
             </form>
 
-            <?php if($post['post_text']!=="") : ?>
+            <?php if(isset($_POST['post-id'],$_POST['post-text'])) : 
+            if($_POST['post-id']===$post['post_id']) : ?>
+                <div class="comment-box">
+                    <h5 class="comment-user"><?= $_SESSION['user']['username'] ?></h5>
+                    <form class="edit-post-form" action="/app/posts/update.php" method="post">
+                        <input type="hidden" name="post-id" value="<?= $post['post_id']; ?>">
+                        <input type="hidden" name="return-url" value="/search.php">
+                        <input type="text" name="post-text" placeholder="<?= $_POST['post-text']; ?>">
+                        <button class="edit-comment-button" type="submit">Update</button>
+                    </form>
+                    <!-- <h6 class="comment"><?= $post['post_text'] ?></h6> -->
+                </div>
+            <?php endif; 
+        elseif($post['post_text']!=="") : ?>
                 <div class="comment-box">
                     <h5 class="comment-user"><?= $username; ?></h5>
                     <h6 class="comment"><?= $post['post_text'] ?></h6>
