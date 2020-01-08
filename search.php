@@ -4,7 +4,10 @@
     $id = $_SESSION['profileID'];
     $user = getUserByID($id, $pdo);
     $posts = getPostsByUser($id,$pdo);
-    $avatar = getAvatar($id, $pdo); ?>
+    $avatar = getAvatar($id, $pdo);
+    $followers = getNumFollowers($id, $pdo);
+    $followings = getNumFollowings($id, $pdo); 
+    $isFollowing = FollowByID($id, $_SESSION['user']['id'], $pdo); ?>
 <article>
     
     <div class='avatarAndProfileData'>
@@ -18,17 +21,27 @@
             <h6>POSTS</h6>
         </div>
         <div class="post-follow-item">
-            <h5>0</h5>
+            <h5><?= $followers; ?></h5>
             <h6>FOLLOWERS</h6>
         </div>
         <div class="post-follow-item">
-            <h5>0</h5>
+            <h5><?= $followings; ?></h5>
             <h6>FOLLOWING</h6>
         </div>
     </div>
-    <h5 class='username'><?php echo $user['username']; ?></h5>
-    <h6 class='bio'><?php echo $user['bio']; ?></h6>
-
+    <div class="username-bio-follow-banner">
+        <div>
+            <h5 class='username'><?php echo $user['username']; ?></h5>
+            <h6 class='bio'><?php echo $user['bio']; ?></h6>
+        </div>
+        <div>
+            <?php if($isFollowing) : ?>
+                <h6 class="following">Following</h6>
+            <?php else : ?>
+                <button onclick="followUser()">Follow</button>
+            <?php endif; ?>
+        </div>
+    </div>
     <?php foreach ($posts as $post) : 
         $liked = getLikesByPost($post["post_id"], $pdo) ?>
         <?php $id = $post['user_id'];

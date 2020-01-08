@@ -2,7 +2,9 @@
 <!-- print errors -->
 <?php $id = $_SESSION['user']['id'];
 $posts = getPostsByUser($id, $pdo); 
-$avatar = getAvatar($id, $pdo); ?>
+$avatar = getAvatar($id, $pdo); 
+$followers = getNumFollowers($id, $pdo);
+$followings = getNumFollowings($id, $pdo); ?>
 
 <article>
 
@@ -17,12 +19,12 @@ $avatar = getAvatar($id, $pdo); ?>
                 <h5><?= count($posts); ?></h5>
                 <h6>POSTS</h6>
             </div>
-            <div class=post-follow-item>
-                <h5>0</h5>
+            <div class="post-follow-item">
+                <h5><?= $followers; ?></h5>
                 <h6>FOLLOWERS</h6>
             </div>
-            <div class=post-follow-item>
-                <h5>0</h5>
+            <div class="post-follow-item">
+                <h5><?= $followings; ?></h5>
                 <h6>FOLLOWING</h6>
             </div>
         </div>

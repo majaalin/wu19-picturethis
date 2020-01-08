@@ -20,6 +20,17 @@ h6 {
     font-size: small;
 }
 
+.following {
+    color: forestgreen;
+    margin-right: 20px;
+}
+
+.username-bio-follow-banner {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
 .avatarAndProfileData {
     display: flex;
     justify-content: space-evenly;

@@ -7,6 +7,12 @@ nav {
     overflow-x: hidden;
 }
 
+.navbar-brand {
+    font-family: BeautifulPeople;
+    font-size: 30px;
+    padding-bottom: 0;
+}
+
 .navbar {
     position: fixed;
     width: 100%;
