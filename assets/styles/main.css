@@ -142,9 +142,10 @@ button {
 
 .edit-comment-button {
     margin: 0;
+    padding: 2px;
 }
 
-.edit-comment-form {
+.edit-post-form {
     display: flex;
     justify-content: space-between;
 }
@@ -163,6 +164,7 @@ button {
 .comment-box {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     line-height: normal;
 }
 

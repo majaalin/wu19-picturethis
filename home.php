@@ -43,19 +43,14 @@ $followings = getNumFollowings($id, $pdo); ?>
                 <h5 class="post-user"><?= $_SESSION['user']['username'] ?></h5>
             </div>
                 <div class="edit-delete-icons">
-                    <form id="<?= $post['post_id']; ?>-edit" action="#" method="post">
-                    <input type="hidden" name="post-id" value="<?= $post['post_id']; ?>">
-                    <input type="hidden" name="post-text" value="<?= $post['post_text']; ?>">
-                    <div onclick="document.getElementById('<?= $post['post_id']; ?>-edit').submit();">
-                        <img class="post-edit" src="/assets/icons/edit.svg" alt="edit">
+                    <div>
+                        <img class="post-edit" id="<?= $post['post_id']; ?>" src="/assets/icons/edit.svg" alt="edit">
                     </div>
-                    </form>
-                    
                     <form id="<?= $post['post_id']; ?>-delete" action="/app/posts/delete.php" method="post">
-                    <input type="hidden" name="post-id" value="<?= $post['post_id']; ?>">
-                    <div onclick="document.getElementById('<?= $post['post_id']; ?>-delete').submit();">
-                        <img class="post-delete" src="/assets/icons/delete.svg" alt="delete">
-                    </div>
+                        <input type="hidden" name="post-id" value="<?= $post['post_id']; ?>">
+                        <div onclick="document.getElementById('<?= $post['post_id']; ?>-delete').submit();">
+                            <img class="post-delete" src="/assets/icons/delete.svg" alt="delete">
+                        </div>
                     </form>
                 </div>
         </div>
@@ -69,6 +64,7 @@ $followings = getNumFollowings($id, $pdo); ?>
                 <a href="#"><img class = "like-comment" src="/assets/icons/comment.svg" alt="comment"></a>
             </div>
         </form>
+        <div class="comments-container comments-container-<?= $post['post_id']; ?>">
         <?php if(isset($_POST['post-id'],$_POST['post-text'])) : 
             if($_POST['post-id']===$post['post_id']) : ?>
                 <div class="comment-box">
@@ -85,11 +81,68 @@ $followings = getNumFollowings($id, $pdo); ?>
         elseif($post['post_text']!=="") : ?>
             <div class="comment-box">
                 <h5 class="comment-user"><?= $_SESSION['user']['username'] ?></h5>
-                <h6 class="comment"><?= $post['post_text'] ?></h6>
+                <h6 class="comment-<?= $post['post_id'] ?>"><?= $post['post_text'] ?></h6>
             </div>
         <?php endif; ?>
+        </div>
     <?php endforeach; ?>
         
 </article>
+
+<script>
+    'use strict';
+    const imgs = document.querySelectorAll(".post-edit");
+    imgs.forEach(img => {
+        const ID = img.id;
+        img.addEventListener('click', event => {
+            const commentsDiv = document.querySelector(`.comments-container-${ID}`);
+            event.preventDefault();
+            let existingText = "";
+            if(document.querySelector(`.comment-${ID}`)) {
+                let h6 = document.querySelector(`.comment-${ID}`);
+                existingText = h6.innerHTML;
+            }
+            commentsDiv.innerHTML = "";
+            const div = document.createElement('div');
+            div.classList.add("comment-box");
+            const h5 = document.createElement('h5');
+            h5.classList.add("comment-user");
+            h5.innerHTML = "<?= $_SESSION['user']['username'] ?>";
+            div.appendChild(h5);
+            const editForm = document.createElement('form');
+            editForm.classList.add("edit-post-form");
+            editForm.action = "editPost()";
+            editForm.method = "post";
+            editForm.innerHTML = `<input type="hidden" name="post-id" value="${ID}">
+            <input type="text" name="post-text" value="${existingText}">
+            <button class="edit-comment-button" type="submit">Update</button>`;
+            div.appendChild(editForm);
+            commentsDiv.appendChild(div);
+    
+            editForm.addEventListener('submit', event => {
+                event.preventDefault();
+                const formData = new FormData(editForm);
+                fetch('/app/posts/update.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(post => {
+                    div.innerHTML = "";
+                    if(post.postText!=="") {
+                        const h5 = document.createElement('h5');
+                        h5.classList.add("comment-user");
+                        h5.innerHTML = "<?= $_SESSION['user']['username'] ?>";
+                        div.appendChild(h5);
+                        const h6 = document.createElement('h6');
+                        h6.classList.add(`comment-${ID}`);
+                        h6.innerHTML = post.postText;
+                        div.appendChild(h6);
+                    };
+                });
+            });
+        }); 
+    });
+</script>
 
 <?php require __DIR__.'/views/footer.php'; ?>
