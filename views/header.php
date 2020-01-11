@@ -17,6 +17,3 @@ require __DIR__.'/../app/autoload.php';
     <link rel="stylesheet" href="/assets/styles/nav.css">
 </head>
 <body>
-    <?php require __DIR__.'/navigation.php'; ?>
-
-    <div class="container py-5">

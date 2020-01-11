@@ -8,6 +8,8 @@
         <a href="home.php"><img class="footer-img home" src="/../<?= (isset($_SESSION['avatar']) ? 'app/database/avatars/' . $_SESSION['avatar'] : 'assets/icons/noprofile.png'); ?>"></a>
     </div>
 
-    <script src="/../assets/scripts/main.js"></script>
+    <?php if($_SERVER['REQUEST_URI'] !== '/' && $_SERVER['REQUEST_URI'] !== '/index.php') : ?>
+        <script src="/../assets/scripts/main.js"></script>
+    <?php endif; ?>
 </body>
 </html>

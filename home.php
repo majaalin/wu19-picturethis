@@ -1,5 +1,8 @@
 <?php require __DIR__.'/views/header.php'; ?>
-<!-- print errors -->
+<?php require __DIR__.'/views/navigation.php'; ?>
+
+<div class="container py-5">
+
 <?php $id = $_SESSION['user']['id'];
 $posts = getPostsByUser($id, $pdo); 
 $avatar = getAvatar($id, $pdo); 
