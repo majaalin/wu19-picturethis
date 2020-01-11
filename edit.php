@@ -1,7 +1,17 @@
 <?php require __DIR__.'/views/header.php'; ?>
 
+<?php if(isset($_SESSION['errors'])) {
+    $errors = $_SESSION['errors'];
+} else {
+    $errors = [];
+} ?>
+
 <article>
     <h1>Edit Profile</h1>
+
+    <?php foreach ($errors as $error) : ?>
+        <p class="errors"><?= $error; ?></p>
+    <?php endforeach; ?>
 
     <form action="#" method="post" enctype="multipart/form-data">
         <div>
@@ -10,9 +20,9 @@
             <?php else : 
                 $avatar = $_FILES['avatar']; 
                 if (!in_array($avatar['type'], ['image/jpeg', 'image/png'])) : ?>
-                    <p>The uploaded file type is not allowed.</p>
+                    <p class="errors">The uploaded file type is not allowed.</p>
                 <?php elseif ($avatar['size'] > 2097152) : ?>
-                    <p>The uploaded file exceeds the 2MB filesize limit.</p>
+                    <p class="errors">The uploaded file exceeds the 2MB filesize limit.</p>
                 <?php else :
                     if(isset($_SESSION['avatar'])) :
                         unlink(__DIR__.'/app/database/avatars/'.$_SESSION['avatar']);
@@ -80,4 +90,5 @@
     </form>
 </article>
 
+<?php unset($_SESSION['errors']); ?>
 <?php require __DIR__.'/views/footer.php'; ?>

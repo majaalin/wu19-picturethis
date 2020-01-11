@@ -5,11 +5,13 @@ if (isset($_SESSION['user'])) {
 } ?>
 
 <article>
-    <h1 class='title-heading'><?php echo $config['title']; ?></h1>
 
-    <?php if (isset($_SESSION['user'])) : ?>
-        <p>Welcome, <?php echo $_SESSION['user']['firstname']; ?>, to the feed!</p>
-    <?php endif; ?>
+    <h1 class='title-heading'><?php echo $config['title']; ?></h1>
+    <p>Sign up to see pictures from your friends.</p>
+    <button>Login</button>
+    <p>or</p>
+    <button>Create an Account</button>
+
 </article>
 
 <?php require __DIR__.'/views/footer.php'; ?>

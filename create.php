@@ -1,7 +1,17 @@
 <?php require __DIR__.'/views/header.php'; ?>
 
+<?php if(isset($_SESSION['errors'])) {
+    $errors = $_SESSION['errors'];
+} else {
+    $errors = [];
+} ?>
+
 <article>
     <h1>Create Account</h1>
+
+    <?php foreach ($errors as $error) : ?>
+        <p class="errors"><?= $error; ?></p>
+    <?php endforeach; ?>
 
     <form action="app/users/create.php" method="post">
         <div class="form-group">
@@ -44,4 +54,5 @@
     </form>
 </article>
 
+<?php unset($_SESSION['errors']); ?>
 <?php require __DIR__.'/views/footer.php'; ?>

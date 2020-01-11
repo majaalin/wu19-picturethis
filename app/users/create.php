@@ -1,9 +1,11 @@
 <?php
 declare(strict_types=1);
 require __DIR__.'/../autoload.php';
-// In this file we create an account and login users.
+// This file is called when an account is created.
 
-// Check if both email and password exists in the POST request.
+$errors = [];
+
+// Check that all variables exist in the POST request and sanitize and encrypt passwprd.
 if (isset($_POST['firstname'],$_POST['lastname'],$_POST['username'],$_POST['bio'],$_POST['email'], $_POST['password'])) {
     $firstname = trim(filter_var($_POST['firstname'], FILTER_SANITIZE_STRING));
     $lastname = trim(filter_var($_POST['lastname'], FILTER_SANITIZE_STRING));
@@ -11,19 +13,47 @@ if (isset($_POST['firstname'],$_POST['lastname'],$_POST['username'],$_POST['bio'
     $email = trim(filter_var($_POST['email'], FILTER_SANITIZE_EMAIL));
     $htmlPassword = trim(htmlentities($_POST['password']));
     $password = password_hash($htmlPassword, PASSWORD_DEFAULT);
-    // password_verify($passphrase, $hash); // true
     if(isset($_POST['bio'])) {
         $bio = trim(filter_var($_POST['bio'], FILTER_SANITIZE_STRING));
     } else {
         $bio = "";
-    }
-    // Prepare, bind email parameter and execute the database query.
+    };
+    
+    // Check username and email doesn't already exist.
+    $queryFetchUser = 'SELECT * FROM users WHERE username = :username';
+    $statement = $pdo->prepare($queryFetchUser);
+    $statement->bindParam(':username', $username, PDO::PARAM_STR);
+    $statement->execute();
+    $usernameExists = $statement->fetch(PDO::FETCH_ASSOC);
 
+    $queryFetchEmail = 'SELECT * FROM users WHERE email = :email';
+    $statement = $pdo->prepare($queryFetchEmail);
+    $statement->bindParam(':email', $email, PDO::PARAM_STR);
+    $statement->execute();
+    $emailExists = $statement->fetch(PDO::FETCH_ASSOC);
+    
+    if ($usernameExists && $emailExists) {
+        $errors[] = 'The username and email you\'ve entered are both already being used. Do you perhaps already have an account?';
+        $_SESSION['errors'] = $errors;
+        redirect('/create.php');
+    } elseif ($usernameExists) {
+        $errors[] = 'The username you\'ve selected is already taken. What else could you imagine calling yourself?';
+        $_SESSION['errors'] = $errors;
+        redirect('/create.php');
+    } elseif ($emailExists) {
+        $errors[] = 'The email you\'ve entered is already taken. Do you perhaps already have an account?';
+        $_SESSION['errors'] = $errors;
+        redirect('/create.php');
+    };
+
+    // Create account and insert new user's details into the database.
     $queryCreate = 'INSERT INTO users (firstname, lastname, username, bio, email, password) VALUES (:firstname, :lastname, :username, :bio, :email, :password)';
     $statement = $pdo->prepare($queryCreate);
     if (!$statement) {
-        redirect('/../../create.php'); // send back to create form somehow
-    }
+        $errors[] = 'An error occured creating your account. Please try again.';
+        $_SESSION['errors'] = $errors;
+        redirect('/create.php');
+    };
     $statement->execute([
         ':firstname' => $firstname,
         ':lastname' => $lastname,
@@ -33,27 +63,27 @@ if (isset($_POST['firstname'],$_POST['lastname'],$_POST['username'],$_POST['bio'
         ':password' => $password
     ]);
 
+    // Log the new user in.
     $queryLogin = 'SELECT * FROM users WHERE email = :email';
     $statement = $pdo->prepare($queryLogin);
     $statement->bindParam(':email', $email, PDO::PARAM_STR);
     $statement->execute();
-    // Fetch the user as an associative array.
     $user = $statement->fetch(PDO::FETCH_ASSOC);
-    // If we couldn't find the user in the database, redirect back to the login
-    // page with our custom redirect function.
     if (!$user) {
-        redirect('/login.php');
-    }
-    // If we found the user in the database, compare the given password from the
-    // request with the one in the database using the password_verify function.
+        $errors[] = 'An error occured creating your account. Please try again.';
+        $_SESSION['errors'] = $errors;
+        redirect('/create.php');
+    };
+    // Verify the password doesn't contain any special characters (verifies against htmlentities function above).
     if (password_verify($_POST['password'], $user['password'])) {
-        // If the password was valid we know that the user exists and provided
-        // the correct password. We can now save the user in our session.
-        // Remember to not save the password in the session!
+        // If the password is valid, remove the password from the session.
         unset($user['password']);
         $_SESSION['user'] = $user;
-    }
-}
-// We should put this redirect in the end of this file since we always want to
-// redirect the user back from this file. We don't know
+    } else {
+        $errors[] = 'Please choose a password without spaces or special characters.';
+        $_SESSION['errors'] = $errors;
+        redirect('/create.php');
+    };
+};
+
 redirect('/home.php');

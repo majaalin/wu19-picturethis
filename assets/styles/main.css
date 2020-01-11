@@ -217,3 +217,11 @@ input {
 .follow-buttons {
     margin: 0;
 }
+
+.errors {
+    color: crimson;
+}
+
+.title-heading {
+    font-family: BeautifulPeople;
+}

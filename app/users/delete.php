@@ -1,7 +1,8 @@
 <?php
 declare(strict_types=1);
 require __DIR__.'/../autoload.php';
-// In this file we logout a user and delete an account.
+// This file is called when a user's account is deleted.
+
 $id = intval($_SESSION['user']['id']);
 
 // Delete user
@@ -20,7 +21,7 @@ $posts = $statement->fetchAll(PDO::FETCH_ASSOC);
 foreach ($posts as $post) {
     $postPath = $post['post_image'];
     unlink(__DIR__.'/../database/posts/'.$postPath);
-}
+};
 
 $queryDeletePosts = sprintf("DELETE FROM posts WHERE user_id = :user_id");
 $statement = $pdo->prepare($queryDeletePosts);
@@ -47,6 +48,7 @@ if($_SESSION['avatar']) {
     $statement->execute();
     unlink(__DIR__.'/../database/avatars/'.$_SESSION['avatar']);
     unset($_SESSION['avatar']);
-}
+};
+
 unset($_SESSION['user']);
 redirect('/');

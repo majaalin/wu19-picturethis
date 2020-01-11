@@ -17,7 +17,8 @@ if (isset($_POST['email'], $_POST['password'])) {
     // If we couldn't find the user in the database, redirect back to the login
     // page with our custom redirect function.
     if (!$user) {
-        $errors[] = 'You\'ve entered the wrong email address or password. Have you created an account yet?';
+        $errors[] = 'No account exists for the email you\'ve entered. Have you created an account yet?';
+        $_SESSION['errors'] = $errors;
         redirect('/login.php');
     }
     // If we found the user in the database, compare the given password from the
@@ -31,9 +32,13 @@ if (isset($_POST['email'], $_POST['password'])) {
         $statement = $pdo->prepare('SELECT * FROM avatars WHERE avatar_id = :avatar_id');
         $statement->bindParam(':avatar_id', $user['id'], PDO::PARAM_INT);
         $statement->execute();
-        // Fetch the user as an associative array.
+        // Fetch the user and avatar and set them as session variables.
         $avatar = $statement->fetch(PDO::FETCH_ASSOC);
         $_SESSION['avatar'] = $avatar['image'];
+    } else {
+        $errors[] = 'The password you\'ve entered doesn\'t match the username you entered. Why not have another crack?';
+        $_SESSION['errors'] = $errors;
+        redirect('/login.php');
     }
 }
 // We should put this redirect in the end of this file since we always want to
