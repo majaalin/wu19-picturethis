@@ -33,9 +33,9 @@
         <div class="follow-div">
             <?php if($isFollowing) : ?>
                 <h6 class="following">Following</h6>
-                <button onclick="unfollowUser()">Unfollow</button>
+                <button class="follow-buttons" onclick="unfollowUser()">Unfollow</button>
             <?php else : ?>
-                <button onclick="followUser()">Follow</button>
+                <button class="follow-buttons" onclick="followUser()">Follow</button>
             <?php endif; ?>
         </div>
     </div>

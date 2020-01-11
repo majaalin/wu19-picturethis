@@ -27,7 +27,7 @@ const followUser = () => {
     const elementWithID = document.querySelector(".username");
     const followedUserID = elementWithID.id;
     followDiv.innerHTML = `<h6 class="following">Following</h6>
-    <button onclick="unfollowUser()">Unfollow</button>`;
+    <button class="follow-buttons" onclick="unfollowUser()">Unfollow</button>`;
 
     const followForm = document.createElement('form');
     followForm.method = "post";
@@ -47,7 +47,7 @@ const unfollowUser = () => {
     
     const elementWithID = document.querySelector(".username");
     const unfollowedUserID = elementWithID.id;
-    followDiv.innerHTML = `<button onclick="followUser()">Follow</button>`;
+    followDiv.innerHTML = `<button class="follow-buttons" onclick="followUser()">Follow</button>`;
 
     const unfollowForm = document.createElement('form');
     unfollowForm.method = "post";

@@ -209,3 +209,11 @@ input {
 .hide {
     display: none;
 }
+
+.follow-div {
+    display: flex;
+}
+
+.follow-buttons {
+    margin: 0;
+}
