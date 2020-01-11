@@ -33,6 +33,12 @@ $statement = $pdo->prepare($queryDeleteLikes);
 $statement->bindParam(':user_id', $id, PDO::PARAM_INT);
 $statement->execute();
 
+// Delete follows
+$queryDeleteFollows = sprintf("DELETE FROM follows WHERE user_id = :user_id OR id_following = :user_id");
+$statement = $pdo->prepare($queryDeleteFollows);
+$statement->bindParam(':user_id', $id, PDO::PARAM_INT);
+$statement->execute();
+
 // Delete avatar
 if($_SESSION['avatar']) {
     $queryDeleteAvatar = sprintf("DELETE FROM avatars WHERE avatar_id = :avatar_id");

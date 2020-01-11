@@ -11,17 +11,13 @@
 <article>
     
     <div class='avatarAndProfileData'>
-        <?php if($avatar!==[]) : ?>
-            <img class='avatar' src="<?php echo '/app/database/avatars/' . $avatar['image']; ?>" alt="<?php echo $_SESSION['profile']['username']; ?>">
-        <?php else : ?>
-            <img class='avatar' src="<?php echo '/assets/icons/noprofile.png'; ?>" alt="noprofile">
-        <?php endif; ?>
+        <img class='avatar' src="<?= (($avatar!==[]) ? '/app/database/avatars/' . $avatar['image'] : '/assets/icons/noprofile.png'); ?>" alt="<?= $user['username']; ?>">
         <div class="post-follow-item">
             <h5><?= count($posts); ?></h5>
             <h6>POSTS</h6>
         </div>
         <div class="post-follow-item">
-            <h5><?= $followers; ?></h5>
+            <h5 class="numFollowers"><?= $followers; ?></h5>
             <h6>FOLLOWERS</h6>
         </div>
         <div class="post-follow-item">
@@ -31,12 +27,13 @@
     </div>
     <div class="username-bio-follow-banner">
         <div>
-            <h5 class='username'><?php echo $user['username']; ?></h5>
+            <h5 class='username' id="<?= $id; ?>"><?= $user['username']; ?></h5>
             <h6 class='bio'><?php echo $user['bio']; ?></h6>
         </div>
-        <div>
+        <div class="follow-div">
             <?php if($isFollowing) : ?>
                 <h6 class="following">Following</h6>
+                <button onclick="unfollowUser()">Unfollow</button>
             <?php else : ?>
                 <button onclick="followUser()">Follow</button>
             <?php endif; ?>
@@ -50,26 +47,30 @@
         <div class = "<?= $username; ?>-post post">
             <div class = 'post-header'>
                 <div class = "post-header">
-                    <img class="post-avatar" src="<?= (isset($avatar) ? '/app/database/avatars/' . $avatar['image'] : '/assets/icons/noprofile.png'); ?>" alt="avatar">
+                    <img class="post-avatar" src="<?= (($avatar!==null) ? '/app/database/avatars/' . $avatar['image'] : '/assets/icons/noprofile.png'); ?>" alt="avatar">
                     <h5 class="post-user"><?= $username ?></h5>
                 </div>
                 <?php if($id===$_SESSION["user"]["id"]) : ?>
-                <div class="edit-delete-icons">
-                    <img class="post-edit" src="/assets/icons/edit.svg" alt="edit">
-                    <img class="post-delete" src="/assets/icons/delete.svg" alt="delete">
-                </div>
+                    <div class="edit-delete-icons">
+                        <div>
+                            <img class="post-edit" id="<?= $post['post_id']; ?>" src="/assets/icons/edit.svg" alt="edit">
+                        </div>
+                        <form id="<?= $post['post_id']; ?>-delete" action="/app/posts/delete.php" method="post">
+                            <input type="hidden" name="post-id" value="<?= $post['post_id']; ?>">
+                            <div onclick="document.getElementById('<?= $post['post_id']; ?>-delete').submit();">
+                                <img class="post-delete" src="/assets/icons/delete.svg" alt="delete">
+                            </div>
+                        </form>
+                    </div>
                 <?php endif; ?>
             </div>
             <img class = "post-img"  src="<?= '/app/database/posts/' . $post['post_image']; ?>" alt="post">
-            <form id="<?= $post['post_id']; ?>-like" action="app/posts/<?= ($liked) ? "removeLike.php" : "like.php"; ?>" method="post">
-                <input type="hidden" name="post-id" value="<?= $post['post_id']; ?>">
-                <input type="hidden" name="liked-user-id" value="<?= $id; ?>">
-                <input type="hidden" name="return-url" id="<?= $post['post_id']; ?>-return" value="">    
-                <div onclick="document.getElementById('<?= $post['post_id']; ?>-return').value = getScrolledURL(window.pageYOffset); document.getElementById('<?= $post['post_id']; ?>-like').submit();" class = "like-comment-strip">
-                    <img class = "like-comment" src="/assets/icons/<?= ($liked) ? "like_active.png" : "like_inactive.svg"; ?>" alt="like">
-                    <a href="#"><img class = "like-comment" src="/assets/icons/comment.svg" alt="comment"></a>
-                </div>
-            </form>
+                <div class = "like-comment-strip">
+                <img class = "like-img like-comment" id="<?= $post['post_id']; ?>" src="/assets/icons/<?= ($liked) ? "like_active.png" : "like_inactive.svg"; ?>" alt="like">
+                <a href="#"><img class = "like-comment comment-img" src="/assets/icons/comment.svg" alt="comment"></a>
+            </div>
+            
+            <div class="comments-container comments-container-<?= $post['post_id']; ?>">
             <?php if($post['post_text']!=="") : ?>
                 <div class="comment-box">
                     <h5 class="comment-user"><?= $username; ?></h5>
@@ -95,52 +96,37 @@
             <div class = 'post-header'>
                 <form id="<?= $post['post_id']; ?>" action="app/posts/searchUser.php" method="post">
                     <input type="hidden" name="profileID" value="<?= $id; ?>">
+                    <input type="hidden" name="return-url" value="/search.php">
                     <div onclick="document.getElementById('<?= $post['post_id']; ?>').submit();" class = "post-header">
-                        <img id="<?= $post['post_id']; ?>" class="post-avatar" src="<?= (isset($avatar) ? '/app/database/avatars/' . $avatar['image'] : '/assets/icons/noprofile.png'); ?>" alt="avatar">
+                        <img id="<?= $post['post_id']; ?>" class="post-avatar" src="<?= (($avatar!==[]) ? '/app/database/avatars/' . $avatar['image'] : '/assets/icons/noprofile.png'); ?>" alt="avatar">
                         <h5 id="<?= $post['post_id']; ?>" class="post-user"><?= $username ?></h5>
                     </div>
                 </form>
 
                 <?php if($id===$_SESSION["user"]["id"]) : ?>
-                    <form id="<?= $post['post_id']; ?>-edit" action="#" method="post">
-                        <input type="hidden" name="post-id" value="<?= $post['post_id']; ?>">
-                        <input type="hidden" name="post-text" value="<?= $post['post_text']; ?>">
-                        <div class="edit-delete-icons">
-                            <div onclick="document.getElementById('<?= $post['post_id']; ?>-edit').submit();">
-                                <img class="post-edit" src="/assets/icons/edit.svg" alt="edit">
-                            </div>
-                            <img class="post-delete" src="/assets/icons/delete.svg" alt="delete">
+                    <div class="edit-delete-icons">
+                        <div>
+                            <img class="post-edit" id="<?= $post['post_id']; ?>" src="/assets/icons/edit.svg" alt="edit">
                         </div>
-                    </form>
+                        <form id="<?= $post['post_id']; ?>-delete" action="/app/posts/delete.php" method="post">
+                            <input type="hidden" name="post-id" value="<?= $post['post_id']; ?>">
+                            <div onclick="document.getElementById('<?= $post['post_id']; ?>-delete').submit();">
+                                <img class="post-delete" src="/assets/icons/delete.svg" alt="delete">
+                            </div>
+                        </form>
+                    </div>
                 <?php endif; ?>
             </div>
 
             <img class = "post-img"  src="<?= '/app/database/posts/' . $post['post_image']; ?>" alt="post">
             
-            <form id="<?= $post['post_id']; ?>-like" action="app/posts/<?= ($liked) ? "removeLike.php" : "like.php"; ?>" method="post">
-                <input type="hidden" name="post-id" value="<?= $post['post_id']; ?>">
-                <input type="hidden" name="liked-user-id" value="<?= $id; ?>">
-                <input type="hidden" name="return-url" id="<?= $post['post_id']; ?>-return" value="">    
-                <div onclick="document.getElementById('<?= $post['post_id']; ?>-return').value = getScrolledURL(window.pageYOffset); document.getElementById('<?= $post['post_id']; ?>-like').submit();" class = "like-comment-strip">
-                    <img class = "like-comment" src="/assets/icons/<?= ($liked) ? "like_active.png" : "like_inactive.svg"; ?>" alt="like">
-                    <a href="#"><img class = "like-comment" src="/assets/icons/comment.svg" alt="comment"></a>
-                </div>
-            </form>
-
-            <?php if(isset($_POST['post-id'],$_POST['post-text'])) : 
-            if($_POST['post-id']===$post['post_id']) : ?>
-                <div class="comment-box">
-                    <h5 class="comment-user"><?= $_SESSION['user']['username'] ?></h5>
-                    <form class="edit-post-form" action="/app/posts/update.php" method="post">
-                        <input type="hidden" name="post-id" value="<?= $post['post_id']; ?>">
-                        <input type="hidden" name="return-url" value="/search.php">
-                        <input type="text" name="post-text" placeholder="<?= $_POST['post-text']; ?>">
-                        <button class="edit-comment-button" type="submit">Update</button>
-                    </form>
-                    <!-- <h6 class="comment"><?= $post['post_text'] ?></h6> -->
-                </div>
-            <?php endif; 
-        elseif($post['post_text']!=="") : ?>
+            <div class = "like-comment-strip">
+                <img class = "like-img like-comment" id="<?= $post['post_id']; ?>" src="/assets/icons/<?= ($liked) ? "like_active.png" : "like_inactive.svg"; ?>" alt="like">
+                <a href="#"><img class = "like-comment comment-img" src="/assets/icons/comment.svg" alt="comment"></a>
+            </div>
+            
+            <div class="comments-container comments-container-<?= $post['post_id']; ?>">
+            <?php if($post['post_text']!=="") : ?>
                 <div class="comment-box">
                     <h5 class="comment-user"><?= $username; ?></h5>
                     <h6 class="comment"><?= $post['post_text'] ?></h6>
@@ -152,6 +138,93 @@
 </article>
 
 <?php } ?>
+
+<script>
+    'use strict';
+    const imgs = document.querySelectorAll(".post-edit");
+    imgs.forEach(img => {
+        const ID = img.id;
+        img.addEventListener('click', event => {
+            const commentsDiv = document.querySelector(`.comments-container-${ID}`);
+            event.preventDefault();
+            let existingText = "";
+            if(document.querySelector(`.comment-${ID}`)) {
+                let h6 = document.querySelector(`.comment-${ID}`);
+                existingText = h6.innerHTML;
+            }
+            commentsDiv.innerHTML = "";
+            const div = document.createElement('div');
+            div.classList.add("comment-box");
+            const h5 = document.createElement('h5');
+            h5.classList.add("comment-user");
+            h5.innerHTML = "<?= $_SESSION['user']['username'] ?>";
+            div.appendChild(h5);
+            const editForm = document.createElement('form');
+            editForm.classList.add("edit-post-form");
+            editForm.method = "post";
+            editForm.innerHTML = `<input type="hidden" name="post-id" value="${ID}">
+            <input type="text" name="post-text" value="${existingText}">
+            <button class="edit-comment-button" type="submit">Update</button>`;
+            div.appendChild(editForm);
+            commentsDiv.appendChild(div);
+    
+            editForm.addEventListener('submit', event => {
+                event.preventDefault();
+                const formData = new FormData(editForm);
+                fetch('/app/posts/update.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(post => {
+                    div.innerHTML = "";
+                    if(post.postText!=="") {
+                        const h5 = document.createElement('h5');
+                        h5.classList.add("comment-user");
+                        h5.innerHTML = "<?= $_SESSION['user']['username'] ?>";
+                        div.appendChild(h5);
+                        const h6 = document.createElement('h6');
+                        h6.classList.add(`comment-${ID}`);
+                        h6.innerHTML = post.postText;
+                        div.appendChild(h6);
+                    };
+                });
+            });
+        }); 
+    });
+
+    let likeIMGs = document.querySelectorAll(".like-img");
+    likeIMGs.forEach(likeIMG => {
+        const ID = likeIMG.id;
+        likeIMG.addEventListener('click', event => {
+            event.preventDefault();
+            let liked = true;
+            if(likeIMG.src.includes("/assets/icons/like_inactive.svg")) {
+                likeIMG.src='/assets/icons/like_active.png';
+            } else {
+                likeIMG.src='/assets/icons/like_inactive.svg';
+                liked = false;
+            }
+            const likeForm = document.createElement('form');
+            likeForm.method = "post";
+            likeForm.innerHTML = `<input type="hidden" name="post-id" value="${ID}">
+            <input type="hidden" name="liked-user-id" value="<?= $id; ?>">`;
+            if (liked) {
+                const likeFormData = new FormData(likeForm);
+                fetch("app/posts/like.php", {
+                method: 'POST',
+                body: likeFormData
+                });
+            } else {
+                const removeLikeFormData = new FormData(likeForm);
+                fetch("app/posts/removeLike.php", {
+                method: 'POST',
+                body: removeLikeFormData
+                });
+            };  
+        });
+    });
+</script>
 
 <?php unset($_SESSION['profileID']); ?>
 <?php require __DIR__.'/views/footer.php'; ?>

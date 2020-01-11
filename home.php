@@ -42,43 +42,27 @@ $followings = getNumFollowings($id, $pdo); ?>
                 <img class="post-avatar" src="<?= (isset($_SESSION['avatar']) ? '/app/database/avatars/' . $avatar['image'] : '/assets/icons/noprofile.png'); ?>" alt="avatar">
                 <h5 class="post-user"><?= $_SESSION['user']['username'] ?></h5>
             </div>
-                <div class="edit-delete-icons">
-                    <div>
-                        <img class="post-edit" id="<?= $post['post_id']; ?>" src="/assets/icons/edit.svg" alt="edit">
-                    </div>
-                    <form id="<?= $post['post_id']; ?>-delete" action="/app/posts/delete.php" method="post">
-                        <input type="hidden" name="post-id" value="<?= $post['post_id']; ?>">
-                        <div onclick="document.getElementById('<?= $post['post_id']; ?>-delete').submit();">
-                            <img class="post-delete" src="/assets/icons/delete.svg" alt="delete">
-                        </div>
-                    </form>
+            <div class="edit-delete-icons">
+                <div>
+                    <img class="post-edit" id="<?= $post['post_id']; ?>" src="/assets/icons/edit.svg" alt="edit">
                 </div>
+                <form id="<?= $post['post_id']; ?>-delete" action="/app/posts/delete.php" method="post">
+                    <input type="hidden" name="post-id" value="<?= $post['post_id']; ?>">
+                    <div onclick="document.getElementById('<?= $post['post_id']; ?>-delete').submit();">
+                        <img class="post-delete" src="/assets/icons/delete.svg" alt="delete">
+                    </div>
+                </form>
+            </div>
         </div>
         <img class = "post-img"  src="<?= '/app/database/posts/' . $post['post_image'] ?>" alt="post">
-        <form id="<?= $post['post_id']; ?>-like" action="app/posts/<?= ($liked) ? "removeLike.php" : "like.php"; ?>" method="post">
-            <input type="hidden" name="post-id" value="<?= $post['post_id']; ?>">
-            <input type="hidden" name="liked-user-id" value="<?= $id; ?>">
-            <input type="hidden" name="return-url" id="<?= $post['post_id']; ?>-return" value="">    
-            <div onclick="document.getElementById('<?= $post['post_id']; ?>-return').value = getScrolledURL(window.pageYOffset); document.getElementById('<?= $post['post_id']; ?>-like').submit();" class = "like-comment-strip">
-                <img class = "like-comment" src="/assets/icons/<?= ($liked) ? "like_active.png" : "like_inactive.svg"; ?>" alt="like">
-                <a href="#"><img class = "like-comment" src="/assets/icons/comment.svg" alt="comment"></a>
-            </div>
-        </form>
+        
+        <div class = "like-comment-strip">
+            <img class = "like-img like-comment" id="<?= $post['post_id']; ?>" src="/assets/icons/<?= ($liked) ? "like_active.png" : "like_inactive.svg"; ?>" alt="like">
+            <a href="#"><img class = "like-comment comment-img" src="/assets/icons/comment.svg" alt="comment"></a>
+        </div>
+        
         <div class="comments-container comments-container-<?= $post['post_id']; ?>">
-        <?php if(isset($_POST['post-id'],$_POST['post-text'])) : 
-            if($_POST['post-id']===$post['post_id']) : ?>
-                <div class="comment-box">
-                    <h5 class="comment-user"><?= $_SESSION['user']['username'] ?></h5>
-                    <form class="edit-post-form" action="/app/posts/update.php" method="post">
-                        <input type="hidden" name="post-id" value="<?= $post['post_id']; ?>">
-                        <input type="hidden" name="return-url" value="/home.php">
-                        <input type="text" name="post-text" placeholder="<?= $_POST['post-text']; ?>">
-                        <button class="edit-comment-button" type="submit">Update</button>
-                    </form>
-                    <!-- <h6 class="comment"><?= $post['post_text'] ?></h6> -->
-                </div>
-            <?php endif; 
-        elseif($post['post_text']!=="") : ?>
+        <?php if($post['post_text']!=="") : ?>
             <div class="comment-box">
                 <h5 class="comment-user"><?= $_SESSION['user']['username'] ?></h5>
                 <h6 class="comment-<?= $post['post_id'] ?>"><?= $post['post_text'] ?></h6>
@@ -111,7 +95,6 @@ $followings = getNumFollowings($id, $pdo); ?>
             div.appendChild(h5);
             const editForm = document.createElement('form');
             editForm.classList.add("edit-post-form");
-            editForm.action = "editPost()";
             editForm.method = "post";
             editForm.innerHTML = `<input type="hidden" name="post-id" value="${ID}">
             <input type="text" name="post-text" value="${existingText}">
@@ -143,6 +126,38 @@ $followings = getNumFollowings($id, $pdo); ?>
             });
         }); 
     });
+
+    let likeIMGs = document.querySelectorAll(".like-img");
+    likeIMGs.forEach(likeIMG => {
+        const ID = likeIMG.id;
+        likeIMG.addEventListener('click', event => {
+            event.preventDefault();
+            let liked = true;
+            if(likeIMG.src.includes("/assets/icons/like_inactive.svg")) {
+                likeIMG.src='/assets/icons/like_active.png';
+            } else {
+                likeIMG.src='/assets/icons/like_inactive.svg';
+                liked = false;
+            }
+            const likeForm = document.createElement('form');
+            likeForm.method = "post";
+            likeForm.innerHTML = `<input type="hidden" name="post-id" value="${ID}">
+            <input type="hidden" name="liked-user-id" value="<?= $_SESSION['user']['id']; ?>">`;
+            if (liked) {
+                const likeFormData = new FormData(likeForm);
+                fetch("app/posts/like.php", {
+                method: 'POST',
+                body: likeFormData
+                });
+            } else {
+                const removeLikeFormData = new FormData(likeForm);
+                fetch("app/posts/removeLike.php", {
+                method: 'POST',
+                body: removeLikeFormData
+                });
+            };  
+        });
+    });
 </script>
 
-<?php require __DIR__.'/views/footer.php'; ?>
+<?php require __DIR__.'/views/footer.php'; 

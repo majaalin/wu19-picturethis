@@ -18,6 +18,47 @@ footerATags.forEach(element => {
     }
 });
 
+const followUser = () => {
+    const followDiv = document.querySelector(".follow-div");
+    const followers = document.querySelector(".numFollowers");
+    const numFollowers = parseInt(followers.innerHTML);
+    followers.innerHTML = numFollowers+1;
+
+    const elementWithID = document.querySelector(".username");
+    const followedUserID = elementWithID.id;
+    followDiv.innerHTML = `<h6 class="following">Following</h6>
+    <button onclick="unfollowUser()">Unfollow</button>`;
+
+    const followForm = document.createElement('form');
+    followForm.method = "post";
+    followForm.innerHTML = `<input type="hidden" name="followed-user-id" value="${followedUserID}">`;
+    const followFormData = new FormData(followForm);
+    fetch("app/users/follow.php", {
+    method: 'POST',
+    body: followFormData
+    });
+} 
+
+const unfollowUser = () => {
+    const followDiv = document.querySelector(".follow-div");
+    const followers = document.querySelector(".numFollowers");
+    const numFollowers = parseInt(followers.innerHTML);
+    followers.innerHTML = numFollowers-1;
+    
+    const elementWithID = document.querySelector(".username");
+    const unfollowedUserID = elementWithID.id;
+    followDiv.innerHTML = `<button onclick="followUser()">Follow</button>`;
+
+    const unfollowForm = document.createElement('form');
+    unfollowForm.method = "post";
+    unfollowForm.innerHTML = `<input type="hidden" name="unfollowed-user-id" value="${unfollowedUserID}">`;
+    const unfollowFormData = new FormData(unfollowForm);
+    fetch("app/users/unfollow.php", {
+    method: 'POST',
+    body: unfollowFormData
+    });
+} 
+
 const navSlide = () => {
     const menu = document.querySelector('.menu-large');
     const nav = document.querySelector('.navbar-nav');
@@ -29,7 +70,6 @@ const navSlide = () => {
         nav.classList.toggle('nav-active');
         nav.style.animation = `navFade 200ms ease`
 
-
         //Animate Links
         navLinks.forEach((link, index) => {
             if (link.style.animation) {
@@ -40,15 +80,9 @@ const navSlide = () => {
         });
 
         //Burger Animation
-        menu.classList.toggle('toggle1');
+        menu.classList.toggle('translate');
     });
-
-}
-
-function getScrolledURL(pagey) {
-    let scrolledURL = window.location.href.split('?')[0] + '?page_y=' + pagey;
-    return scrolledURL;
-}
+};
 
 navSlide();
 

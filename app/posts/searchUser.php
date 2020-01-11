@@ -11,4 +11,5 @@ if(isset($_POST['profileID'])) {
     }
 }
 
-redirect("/search.php");
+$return = $_POST['return-url'];
+redirect("$return");

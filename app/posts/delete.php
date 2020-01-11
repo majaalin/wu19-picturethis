@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 require __DIR__.'/../autoload.php';
-// In this file we delete the selected post from the database and users profile.
+// In this file we delete the selected post from the database and users profile and return home.
 
 if(isset($_POST['post-id'])) {
     $postID = $_POST['post-id'];
