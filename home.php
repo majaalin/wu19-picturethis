@@ -97,10 +97,11 @@ $followings = getNumFollowings($id, $pdo); ?>
             editForm.classList.add("edit-post-form");
             editForm.method = "post";
             editForm.innerHTML = `<input type="hidden" name="post-id" value="${ID}">
-            <input type="text" name="post-text" value="${existingText}">
+            <input id="updateField" type="text" name="post-text" value="${existingText}">
             <button class="edit-comment-button" type="submit">Update</button>`;
             div.appendChild(editForm);
             commentsDiv.appendChild(div);
+            updateField.focus();
     
             editForm.addEventListener('submit', event => {
                 event.preventDefault();
