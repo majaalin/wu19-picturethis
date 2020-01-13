@@ -16,6 +16,7 @@ require __DIR__.'/../app/autoload.php';
     <link rel="stylesheet" href="/assets/styles/main.css">
     <link rel="stylesheet" href="/assets/styles/fonts.css">
     <link rel="stylesheet" href="/assets/styles/nav.css">
+    <?php require __DIR__."/../assets/styles/body.php"; ?>
     <?php if($_SERVER['REQUEST_URI'] === '/' || $_SERVER['REQUEST_URI'] === '/index.php') : 
     require __DIR__."/../assets/styles/index.php";
     endif; ?>
