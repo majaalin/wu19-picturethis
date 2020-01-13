@@ -29,8 +29,8 @@ nav {
 }
 
 .menu-large {
-display: block;
-z-index: 3;
+    display: block;
+    z-index: 3;
 }
 
 .navbar-nav {
@@ -67,7 +67,7 @@ z-index: 3;
 }
 
 .navbar-nav li:last-child {
-    margin: 20px 0 10% 0;
+    margin: 10px 0 10% 0;
 }
 
 .nav-active {
