@@ -36,6 +36,10 @@ h6 {
     justify-content: space-evenly;
 }
 
+label {
+    margin: 0;
+}
+
 .post-follow-item {
     font-size: 6px;
 }
@@ -85,6 +89,21 @@ button {
     margin: 8px 0;
 }
 
+.submit-button {
+    padding: 0 15px;
+    border: 1px black solid;
+    border-radius: 5px;
+    margin: 8px 0;
+}
+
+.unfollow-button {
+    padding: 0 15px;
+    background-color: transparent;
+    border: 1px black solid;
+    border-radius: 5px;
+    margin: 8px 0;
+}
+
 .footer-img {
     width: 30px;
     height: 30px;
@@ -109,9 +128,12 @@ button {
 .post-header {
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    margin: 0;
+    padding: 8px 0px;
 }
 
-.post-header {
+.post-profile-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -121,7 +143,7 @@ button {
     width: 100%;
     height: auto;
     padding: 0;
-    margin: 0;;
+    margin: 0;
     border: 1px solid lightgray;
 }
 
@@ -157,7 +179,7 @@ button {
     margin: 0;
 }
 
-.post-header ,.like-comment-strip {
+.like-comment-strip {
     margin: 8px 0;
 }
 
@@ -176,8 +198,12 @@ input {
     margin-left: 8px;
 }
 
+.post-text-user {
+    color: darkred;
+}
+
 .comment-user {
-    margin-right: 8px;
+    font-size: 14px;
 }
 
 .comment {
@@ -194,6 +220,11 @@ input {
     padding: 8px 0;
     position: relative;
     z-index: 1;
+}
+
+.post {
+    border-bottom: 1px solid #555;
+    padding-bottom: 8px;
 }
 
 .show {
@@ -222,6 +253,3 @@ input {
     color: crimson;
 }
 
-.title-heading {
-    font-family: BeautifulPeople;
-}

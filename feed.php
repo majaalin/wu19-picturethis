@@ -43,13 +43,14 @@
         </div>
     </div>
     <?php foreach ($posts as $post) : 
-        $liked = getLikesByPost($post["post_id"], $pdo) ?>
+        $liked = getLikesByPost($post["post_id"], $pdo);
+        $comments = getComments($post["post_id"], $pdo); ?>
         <?php $id = $post['user_id'];
         $usernameArray = explode('-',$post['post_image']);
         $username = $usernameArray[0]; ?>
         <div class = "<?= $username; ?>-post post">
             <div class = 'post-header'>
-                <div class = "post-header">
+                <div class = "post-profile-header">
                     <img class="post-avatar" src="<?= (($avatar!==[]) ? '/app/database/avatars/' . $avatar['image'] : '/assets/icons/noprofile.png'); ?>" alt="avatar">
                     <h5 class="post-user"><?= $username ?></h5>
                 </div>
@@ -76,9 +77,17 @@
             <div class="comments-container comments-container-<?= $post['post_id']; ?>">
             <?php if($post['post_text']!=="") : ?>
                 <div class="comment-box">
-                    <h5 class="comment-user"><?= $username; ?></h5>
-                    <h6 class="comment"><?= $post['post_text'] ?></h6>
+                    <h5 class="post-text-user"><?= $username; ?></h5>
+                    <h6 class="comment-<?= $post['post_id']; ?>"><?= $post['post_text'] ?></h6>
                 </div>
+            <?php endif; ?>
+            <?php if($comments!==[]) : ?>
+                <?php foreach ($comments as $comment) : ?>
+                <div class="comment-box">
+                    <h5 class="comment-user"><?= $comment['username']; ?></h5>
+                    <h6 class="comment-<?= $comment['comment_id']; ?>"><?= $comment['comment_text']; ?></h6>
+                </div>
+                <?php endforeach; ?>
             <?php endif; ?>
         </div>
     <?php endforeach; ?>
@@ -94,14 +103,15 @@
         $avatar = getAvatar($id, $pdo); 
         $usernameArray = explode('-',$post['post_image']);
         $username = $usernameArray[0]; 
-        $liked = getLikesByPost($post["post_id"], $pdo) ?>
+        $liked = getLikesByPost($post["post_id"], $pdo);
+        $comments = getComments($post["post_id"], $pdo); ?>
 
         <div class = "<?= $username; ?>-post post">
             <div class = 'post-header'>
                 <form id="<?= $post['post_id']; ?>" action="app/posts/searchUser.php" method="post">
                     <input type="hidden" name="profileID" value="<?= $id; ?>">
                     <input type="hidden" name="return-url" value="/feed.php">
-                    <div onclick="document.getElementById('<?= $post['post_id']; ?>').submit();" class = "post-header">
+                    <div onclick="document.getElementById('<?= $post['post_id']; ?>').submit();" class = "post-profile-header">
                         <img id="<?= $post['post_id']; ?>" class="post-avatar" src="<?= (isset($avatar) ? '/app/database/avatars/' . $avatar['image'] : '/assets/icons/noprofile.png'); ?>" alt="avatar">
                         <h5 id="<?= $post['post_id']; ?>" class="post-user"><?= $username ?></h5>
                     </div>
@@ -132,9 +142,17 @@
             <div class="comments-container comments-container-<?= $post['post_id']; ?>">
             <?php if($post['post_text']!=="") : ?>
                 <div class="comment-box">
-                    <h5 class="comment-user"><?= $username; ?></h5>
-                    <h6 class="comment"><?= $post['post_text'] ?></h6>
+                    <h5 class="post-text-user"><?= $username; ?></h5>
+                    <h6 class="comment-<?= $post['post_id']; ?>"><?= $post['post_text'] ?></h6>
                 </div>
+            <?php endif; ?>
+            <?php if($comments!==[]) : ?>
+                <?php foreach ($comments as $comment) : ?>
+                <div class="comment-box">
+                    <h5 class="comment-user"><?= $comment['username']; ?></h5>
+                    <h6 class="comment-<?= $comment['comment_id']; ?>"><?= $comment['comment_text']; ?></h6>
+                </div>
+                <?php endforeach; ?>
             <?php endif; ?>
 
         </div>
@@ -185,7 +203,7 @@
                     div.innerHTML = "";
                     if(post.postText!=="") {
                         const h5 = document.createElement('h5');
-                        h5.classList.add("comment-user");
+                        h5.classList.add("post-text-user");
                         h5.innerHTML = "<?= $_SESSION['user']['username'] ?>";
                         div.appendChild(h5);
                         const h6 = document.createElement('h6');

@@ -27,7 +27,7 @@ const followUser = () => {
     const elementWithID = document.querySelector(".username");
     const followedUserID = elementWithID.id;
     followDiv.innerHTML = `<h6 class="following">Following</h6>
-    <button class="follow-buttons" onclick="unfollowUser()">Unfollow</button>`;
+    <button class="follow-buttons unfollow-button" onclick="unfollowUser()">Unfollow</button>`;
 
     const followForm = document.createElement('form');
     followForm.method = "post";
@@ -57,33 +57,85 @@ const unfollowUser = () => {
     method: 'POST',
     body: unfollowFormData
     });
-} 
-
-const navSlide = () => {
-    const menu = document.querySelector('.menu-large');
-    const nav = document.querySelector('.navbar-nav');
-    const navLinks = document.querySelectorAll('.navbar-nav li');
-    const navBar = document.querySelector('.navbar');
-    menu.addEventListener('click', () => {
-        //Toggle Nav
-        navBar.classList.toggle('navbar-fixed');
-        nav.classList.toggle('nav-active');
-        nav.style.animation = `navFade 200ms ease`
-
-        //Animate Links
-        navLinks.forEach((link, index) => {
-            if (link.style.animation) {
-                link.style.animation = '';
-            } else {
-                link.style.animation = `navLinkFade 0.4s ease forwards ${index / 8 + 0.15}s`;
-            }
-        });
-
-        //Burger Animation
-        menu.classList.toggle('translate');
-    });
 };
 
-navSlide();
+// // insert comment
+// const commentImgs = document.querySelectorAll(".comment-img");
+// commentImgs.forEach(commentImg => {
+//     const ID = commentImg.id;
+//     commentImg.addEventListener('click', event => {
+//         const commentsDiv = document.querySelector(`.comments-container-${ID}`);
+//         event.preventDefault();
+//         let existingText = "";
+//         if(document.querySelector(`.comment-${ID}`)) {
+//             let h6 = document.querySelector(`.comment-${ID}`);
+//             existingText = h6.innerHTML;
+//         }
+//         commentsDiv.innerHTML = "";
+//         const div = document.createElement('div');
+//         div.classList.add("comment-box");
+//         const h5 = document.createElement('h5');
+//         h5.classList.add("comment-user");
+//         h5.innerHTML = "<?= $_SESSION['user']['username'] ?>";
+//         div.appendChild(h5);
+//         const editForm = document.createElement('form');
+//         editForm.classList.add("edit-post-form");
+//         editForm.method = "post";
+//         editForm.innerHTML = `<input type="hidden" name="post-id" value="${ID}">
+//         <input id="updateField" type="text" name="post-text" value="${existingText}">
+//         <button class="edit-comment-button" type="submit">Update</button>`;
+//         div.appendChild(editForm);
+//         commentsDiv.appendChild(div);
+//         updateField.focus();
+
+//         editForm.addEventListener('submit', event => {
+//             event.preventDefault();
+//             const formData = new FormData(editForm);
+//             fetch('/app/posts/update.php', {
+//                 method: 'POST',
+//                 body: formData
+//             })
+//             .then(response => response.json())
+//             .then(post => {
+//                 div.innerHTML = "";
+//                 if(post.postText!=="") {
+//                     const h5 = document.createElement('h5');
+//                     h5.classList.add("comment-user");
+//                     h5.innerHTML = "<?= $_SESSION['user']['username'] ?>";
+//                     div.appendChild(h5);
+//                     const h6 = document.createElement('h6');
+//                     h6.classList.add(`comment-${ID}`);
+//                     h6.innerHTML = post.postText;
+//                     div.appendChild(h6);
+//                 };
+//             });
+//         });
+//     }); 
+// });
+
+// // create comment
+// const commentImgs = document.querySelectorAll(".comment-img");
+// commentImgs.forEach(commentImg => {
+//     const ID = commentImg.id;
+//     commentImg.addEventListener('click', event => {
+//         event.preventDefault();
+//         const commentsDiv = document.querySelector(`.comments-container-${ID}`);
+//         const div = document.createElement('div');
+//         div.classList.add("comment-box");
+//         const h5 = document.createElement('h5');
+//         h5.classList.add("comment-user");
+//         h5.innerHTML = "<?= $_SESSION['user']['username'] ?>";
+//         div.appendChild(h5);
+//         const editForm = document.createElement('form');
+//         editForm.classList.add("edit-post-form");
+//         editForm.method = "post";
+//         editForm.innerHTML = `<input type="hidden" name="post-id" value="${ID}">
+//         <input id="updateField" type="text" name="post-text">
+//         <button class="edit-comment-button" type="submit">Update</button>`;
+//         div.appendChild(editForm);
+//         commentsDiv.appendChild(div);
+//         updateField.focus();
+//     });
+// });
 
 

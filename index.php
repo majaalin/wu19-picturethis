@@ -1,6 +1,6 @@
 <?php require __DIR__.'/views/header.php'; ?>
 
-<div class="container py-5">
+<div class="container index-container py-5">
 
 <?php if (isset($_SESSION['user'])) {
         redirect('/feed.php');
@@ -9,10 +9,11 @@
 <article>
 
     <h1 class='title-heading'><?php echo $config['title']; ?></h1>
-    <p>Sign up to see pictures from your friends.</p>
-    <a href="/login.php"><button>Login</button></a>
-    <p>or</p>
-    <a href="/create.php"><button>Create an Account</button></a>
+    <p>Sign up to share pictures with your friends.</p>
+    <div class="title-buttons-div">
+        <a href="/login.php"><button class="title-buttons">Login</button></a>
+        <a href="/create.php"><button class="title-buttons">Create Account</button></a>
+    </div>
 
 </article>
 

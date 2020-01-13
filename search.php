@@ -36,20 +36,21 @@
         <div class="follow-div">
             <?php if($isFollowing) : ?>
                 <h6 class="following">Following</h6>
-                <button class="follow-buttons" onclick="unfollowUser()">Unfollow</button>
+                <button class="follow-buttons unfollow-button" onclick="unfollowUser()">Unfollow</button>
             <?php else : ?>
                 <button class="follow-buttons" onclick="followUser()">Follow</button>
             <?php endif; ?>
         </div>
     </div>
     <?php foreach ($posts as $post) : 
-        $liked = getLikesByPost($post["post_id"], $pdo) ?>
+        $liked = getLikesByPost($post["post_id"], $pdo);
+        $comments = getComments($post["post_id"], $pdo); ?>
         <?php $id = $post['user_id'];
         $usernameArray = explode('-',$post['post_image']);
         $username = $usernameArray[0]; ?>
         <div class = "<?= $username; ?>-post post">
             <div class = 'post-header'>
-                <div class = "post-header">
+                <div class = "post-profile-header">
                     <img class="post-avatar" src="<?= (($avatar!==null) ? '/app/database/avatars/' . $avatar['image'] : '/assets/icons/noprofile.png'); ?>" alt="avatar">
                     <h5 class="post-user"><?= $username ?></h5>
                 </div>
@@ -76,9 +77,17 @@
             <div class="comments-container comments-container-<?= $post['post_id']; ?>">
             <?php if($post['post_text']!=="") : ?>
                 <div class="comment-box">
-                    <h5 class="comment-user"><?= $username; ?></h5>
-                    <h6 class="comment"><?= $post['post_text'] ?></h6>
+                    <h5 class="post-text-user"><?= $username; ?></h5>
+                    <h6 class="comment-<?= $post['post_id']; ?>"><?= $post['post_text'] ?></h6>
                 </div>
+            <?php endif; ?>
+            <?php if($comments!==[]) : ?>
+                <?php foreach ($comments as $comment) : ?>
+                <div class="comment-box">
+                    <h5 class="comment-user"><?= $comment['username']; ?></h5>
+                    <h6 class="comment-<?= $comment['comment_id']; ?>"><?= $comment['comment_text']; ?></h6>
+                </div>
+                <?php endforeach; ?>
             <?php endif; ?>
         </div>
     <?php endforeach; ?>
@@ -92,7 +101,8 @@
         <?php $id = $post['user_id'];
         $avatar = getAvatar($id, $pdo); 
         $usernameArray = explode('-',$post['post_image']);
-        $username = $usernameArray[0]; 
+        $username = $usernameArray[0];
+        $comments = getComments($post["post_id"], $pdo);
         $liked = getLikesByPost($post["post_id"], $pdo) ?>
 
         <div class = "<?= $username; ?>-post post">
@@ -100,7 +110,7 @@
                 <form id="<?= $post['post_id']; ?>" action="app/posts/searchUser.php" method="post">
                     <input type="hidden" name="profileID" value="<?= $id; ?>">
                     <input type="hidden" name="return-url" value="/search.php">
-                    <div onclick="document.getElementById('<?= $post['post_id']; ?>').submit();" class = "post-header">
+                    <div onclick="document.getElementById('<?= $post['post_id']; ?>').submit();" class = "post-profile-header">
                         <img id="<?= $post['post_id']; ?>" class="post-avatar" src="<?= (($avatar!==[]) ? '/app/database/avatars/' . $avatar['image'] : '/assets/icons/noprofile.png'); ?>" alt="avatar">
                         <h5 id="<?= $post['post_id']; ?>" class="post-user"><?= $username ?></h5>
                     </div>
@@ -125,18 +135,27 @@
             
             <div class = "like-comment-strip">
                 <img class = "like-img like-comment" id="<?= $post['post_id']; ?>" src="/assets/icons/<?= ($liked) ? "like_active.png" : "like_inactive.svg"; ?>" alt="like">
-                <a href="#"><img class = "like-comment comment-img" src="/assets/icons/comment.svg" alt="comment"></a>
+                <a href="#"><img class = "like-comment comment-img" id="<?= $post['post_id']; ?>" src="/assets/icons/comment.svg" alt="comment"></a>
             </div>
             
             <div class="comments-container comments-container-<?= $post['post_id']; ?>">
             <?php if($post['post_text']!=="") : ?>
                 <div class="comment-box">
-                    <h5 class="comment-user"><?= $username; ?></h5>
-                    <h6 class="comment"><?= $post['post_text'] ?></h6>
+                    <h5 class="post-text-user"><?= $username; ?></h5>
+                    <h6 class="comment-<?= $post['post_id']; ?>"><?= $post['post_text'] ?></h6>
                 </div>
+            <?php endif; ?>
+            <?php if($comments!==[]) : ?>
+                <?php foreach ($comments as $comment) : ?>
+                <div class="comment-box">
+                    <h5 class="comment-user"><?= $comment['username']; ?></h5>
+                    <h6 class="comment-<?= $comment['comment_id']; ?>"><?= $comment['comment_text']; ?></h6>
+                </div>
+                <?php endforeach; ?>
             <?php endif; ?>
 
         </div>
+    </div>
     <?php endforeach; ?>
 </article>
 
@@ -159,7 +178,7 @@
             const div = document.createElement('div');
             div.classList.add("comment-box");
             const h5 = document.createElement('h5');
-            h5.classList.add("comment-user");
+            h5.classList.add("post-text-user");
             h5.innerHTML = "<?= $_SESSION['user']['username'] ?>";
             div.appendChild(h5);
             const editForm = document.createElement('form');
@@ -184,12 +203,60 @@
                     div.innerHTML = "";
                     if(post.postText!=="") {
                         const h5 = document.createElement('h5');
-                        h5.classList.add("comment-user");
+                        h5.classList.add("post-text-user");
                         h5.innerHTML = "<?= $_SESSION['user']['username'] ?>";
                         div.appendChild(h5);
                         const h6 = document.createElement('h6');
                         h6.classList.add(`comment-${ID}`);
                         h6.innerHTML = post.postText;
+                        div.appendChild(h6);
+                    };
+                });
+            });
+        }); 
+    });
+
+    // insert comment
+    const commentImgs = document.querySelectorAll(".comment-img");
+    commentImgs.forEach(commentImg => {
+        const ID = commentImg.id;
+        commentImg.addEventListener('click', event => {
+            const commentsDiv = document.querySelector(`.comments-container-${ID}`);
+            event.preventDefault();
+            const div = document.createElement('div');
+            div.classList.add("comment-box");
+            const h5 = document.createElement('h5');
+            h5.classList.add("comment-user");
+            h5.innerHTML = "<?= $_SESSION['user']['username'] ?>";
+            div.appendChild(h5);
+            const editForm = document.createElement('form');
+            editForm.classList.add("edit-post-form");
+            editForm.method = "post";
+            editForm.innerHTML = `<input type="hidden" name="post-id" value="${ID}">
+            <input id="updateField" type="text" name="comment-text">
+            <button class="edit-comment-button" type="submit">Post</button>`;
+            div.appendChild(editForm);
+            commentsDiv.appendChild(div);
+            updateField.focus();
+
+            editForm.addEventListener('submit', event => {
+                event.preventDefault();
+                const formData = new FormData(editForm);
+                fetch('/app/posts/comment.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(comment => {
+                    div.innerHTML = "";
+                    if(comment.commentText!=="") {
+                        const h5 = document.createElement('h5');
+                        h5.classList.add("comment-user");
+                        h5.innerHTML = "<?= $_SESSION['user']['username'] ?>";
+                        div.appendChild(h5);
+                        const h6 = document.createElement('h6');
+                        h6.classList.add(`comment-${ID}`);
+                        h6.innerHTML = comment.commentText;
                         div.appendChild(h6);
                     };
                 });

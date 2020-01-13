@@ -39,38 +39,49 @@ $followings = getNumFollowings($id, $pdo); ?>
     <?php endif; ?>
 
     <?php foreach ($posts as $post) : 
-        $liked = getLikesByPost($post["post_id"], $pdo) ?>
-        <div class = 'post-header'>
+        $liked = getLikesByPost($post["post_id"], $pdo);
+        $comments = getComments($post["post_id"], $pdo); ?>
+        <div class = "post">
             <div class = 'post-header'>
-                <img class="post-avatar" src="<?= (isset($_SESSION['avatar']) ? '/app/database/avatars/' . $avatar['image'] : '/assets/icons/noprofile.png'); ?>" alt="avatar">
-                <h5 class="post-user"><?= $_SESSION['user']['username'] ?></h5>
-            </div>
-            <div class="edit-delete-icons">
-                <div>
-                    <img class="post-edit" id="<?= $post['post_id']; ?>" src="/assets/icons/edit.svg" alt="edit">
+                <div class = 'post-profile-header'>
+                    <img class="post-avatar" src="<?= (isset($_SESSION['avatar']) ? '/app/database/avatars/' . $avatar['image'] : '/assets/icons/noprofile.png'); ?>" alt="avatar">
+                    <h5 class="post-user"><?= $_SESSION['user']['username'] ?></h5>
                 </div>
-                <form id="<?= $post['post_id']; ?>-delete" action="/app/posts/delete.php" method="post">
-                    <input type="hidden" name="post-id" value="<?= $post['post_id']; ?>">
-                    <div onclick="document.getElementById('<?= $post['post_id']; ?>-delete').submit();">
-                        <img class="post-delete" src="/assets/icons/delete.svg" alt="delete">
+                <div class="edit-delete-icons">
+                    <div>
+                        <img class="post-edit" id="<?= $post['post_id']; ?>" src="/assets/icons/edit.svg" alt="edit">
                     </div>
-                </form>
+                    <form id="<?= $post['post_id']; ?>-delete" action="/app/posts/delete.php" method="post">
+                        <input type="hidden" name="post-id" value="<?= $post['post_id']; ?>">
+                        <div onclick="document.getElementById('<?= $post['post_id']; ?>-delete').submit();">
+                            <img class="post-delete" src="/assets/icons/delete.svg" alt="delete">
+                        </div>
+                    </form>
+                </div>
             </div>
-        </div>
-        <img class = "post-img"  src="<?= '/app/database/posts/' . $post['post_image'] ?>" alt="post">
-        
-        <div class = "like-comment-strip">
-            <img class = "like-img like-comment" id="<?= $post['post_id']; ?>" src="/assets/icons/<?= ($liked) ? "like_active.png" : "like_inactive.svg"; ?>" alt="like">
-            <a href="#"><img class = "like-comment comment-img" src="/assets/icons/comment.svg" alt="comment"></a>
-        </div>
-        
-        <div class="comments-container comments-container-<?= $post['post_id']; ?>">
-        <?php if($post['post_text']!=="") : ?>
-            <div class="comment-box">
-                <h5 class="comment-user"><?= $_SESSION['user']['username'] ?></h5>
-                <h6 class="comment-<?= $post['post_id'] ?>"><?= $post['post_text'] ?></h6>
+            <img class = "post-img"  src="<?= '/app/database/posts/' . $post['post_image'] ?>" alt="post">
+            
+            <div class = "like-comment-strip">
+                <img class = "like-img like-comment" id="<?= $post['post_id']; ?>" src="/assets/icons/<?= ($liked) ? "like_active.png" : "like_inactive.svg"; ?>" alt="like">
+                <a href="#"><img class = "like-comment comment-img" id="<?= $post['post_id']; ?>" src="/assets/icons/comment.svg" alt="comment"></a>
             </div>
-        <?php endif; ?>
+            
+            <div class="comments-container comments-container-<?= $post['post_id']; ?>">
+                <?php if($post['post_text']!=="") : ?>
+                    <div class="comment-box">
+                        <h5 class="post-text-user"><?= $_SESSION['user']['username'] ?></h5>
+                        <h6 class="comment-<?= $post['post_id'] ?>"><?= $post['post_text'] ?></h6>
+                    </div>
+                <?php endif; ?>
+                <?php if($comments!==[]) : ?>
+                    <?php foreach ($comments as $comment) : ?>
+                    <div class="comment-box">
+                        <h5 class="comment-user"><?= $comment['username']; ?></h5>
+                        <h6 class="comment-<?= $comment['comment_id']; ?>"><?= $comment['comment_text']; ?></h6>
+                    </div>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </div>
         </div>
     <?php endforeach; ?>
         
@@ -93,7 +104,7 @@ $followings = getNumFollowings($id, $pdo); ?>
             const div = document.createElement('div');
             div.classList.add("comment-box");
             const h5 = document.createElement('h5');
-            h5.classList.add("comment-user");
+            h5.classList.add("post-text-user");
             h5.innerHTML = "<?= $_SESSION['user']['username'] ?>";
             div.appendChild(h5);
             const editForm = document.createElement('form');
@@ -118,7 +129,7 @@ $followings = getNumFollowings($id, $pdo); ?>
                     div.innerHTML = "";
                     if(post.postText!=="") {
                         const h5 = document.createElement('h5');
-                        h5.classList.add("comment-user");
+                        h5.classList.add("post-text-user");
                         h5.innerHTML = "<?= $_SESSION['user']['username'] ?>";
                         div.appendChild(h5);
                         const h6 = document.createElement('h6');
@@ -130,6 +141,54 @@ $followings = getNumFollowings($id, $pdo); ?>
             });
         }); 
     });
+
+// insert comment
+const commentImgs = document.querySelectorAll(".comment-img");
+commentImgs.forEach(commentImg => {
+    const ID = commentImg.id;
+    commentImg.addEventListener('click', event => {
+        const commentsDiv = document.querySelector(`.comments-container-${ID}`);
+        event.preventDefault();
+        const div = document.createElement('div');
+        div.classList.add("comment-box");
+        const h5 = document.createElement('h5');
+        h5.classList.add("comment-user");
+        h5.innerHTML = "<?= $_SESSION['user']['username'] ?>";
+        div.appendChild(h5);
+        const editForm = document.createElement('form');
+        editForm.classList.add("edit-post-form");
+        editForm.method = "post";
+        editForm.innerHTML = `<input type="hidden" name="post-id" value="${ID}">
+        <input id="updateField" type="text" name="comment-text">
+        <button class="edit-comment-button" type="submit">Post</button>`;
+        div.appendChild(editForm);
+        commentsDiv.appendChild(div);
+        updateField.focus();
+
+        editForm.addEventListener('submit', event => {
+            event.preventDefault();
+            const formData = new FormData(editForm);
+            fetch('/app/posts/comment.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(comment => {
+                div.innerHTML = "";
+                if(comment.commentText!=="") {
+                    const h5 = document.createElement('h5');
+                    h5.classList.add("comment-user");
+                    h5.innerHTML = "<?= $_SESSION['user']['username'] ?>";
+                    div.appendChild(h5);
+                    const h6 = document.createElement('h6');
+                    h6.classList.add(`comment-${ID}`);
+                    h6.innerHTML = comment.commentText;
+                    div.appendChild(h6);
+                };
+            });
+        });
+    }); 
+});
 
     let likeIMGs = document.querySelectorAll(".like-img");
     likeIMGs.forEach(likeIMG => {
