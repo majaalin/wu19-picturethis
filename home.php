@@ -94,6 +94,8 @@ $followings = getNumFollowings($id, $pdo); ?>
         const ID = img.id;
         img.addEventListener('click', event => {
             const commentsDiv = document.querySelector(`.comments-container-${ID}`);
+            const usernameElement = document.querySelector('.username');
+            const username = usernameElement.innerHTML;
             event.preventDefault();
             let existingText = "";
             if(document.querySelector(`.comment-${ID}`)) {
@@ -105,7 +107,7 @@ $followings = getNumFollowings($id, $pdo); ?>
             div.classList.add("comment-box");
             const h5 = document.createElement('h5');
             h5.classList.add("post-text-user");
-            h5.innerHTML = "<?= $_SESSION['user']['username'] ?>";
+            h5.innerHTML = username;
             div.appendChild(h5);
             const editForm = document.createElement('form');
             editForm.classList.add("edit-post-form");
@@ -130,7 +132,7 @@ $followings = getNumFollowings($id, $pdo); ?>
                     if(post.postText!=="") {
                         const h5 = document.createElement('h5');
                         h5.classList.add("post-text-user");
-                        h5.innerHTML = "<?= $_SESSION['user']['username'] ?>";
+                        h5.innerHTML = username;
                         div.appendChild(h5);
                         const h6 = document.createElement('h6');
                         h6.classList.add(`comment-${ID}`);
@@ -148,12 +150,14 @@ commentImgs.forEach(commentImg => {
     const ID = commentImg.id;
     commentImg.addEventListener('click', event => {
         const commentsDiv = document.querySelector(`.comments-container-${ID}`);
+        const usernameElement = document.querySelector('.username');
+        const username = usernameElement.innerHTML;
         event.preventDefault();
         const div = document.createElement('div');
         div.classList.add("comment-box");
         const h5 = document.createElement('h5');
         h5.classList.add("comment-user");
-        h5.innerHTML = "<?= $_SESSION['user']['username'] ?>";
+        h5.innerHTML = username;
         div.appendChild(h5);
         const editForm = document.createElement('form');
         editForm.classList.add("edit-post-form");
@@ -178,7 +182,7 @@ commentImgs.forEach(commentImg => {
                 if(comment.commentText!=="") {
                     const h5 = document.createElement('h5');
                     h5.classList.add("comment-user");
-                    h5.innerHTML = "<?= $_SESSION['user']['username'] ?>";
+                    h5.innerHTML = username;
                     div.appendChild(h5);
                     const h6 = document.createElement('h6');
                     h6.classList.add(`comment-${ID}`);
