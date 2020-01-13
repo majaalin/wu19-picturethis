@@ -6,7 +6,7 @@ declare(strict_types=1); ?>
     body {
         width: 100vw;
         height: 100vh;
-        background: url("/../../assets/portraitImages/<?= $selectedBackground; ?>");
+        background: url("/../../assets/titleImages/<?= $randomImage; ?>");
         background-size: cover;
         background-repeat: no-repeat;
         background-position: 50% 50%;
