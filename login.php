@@ -29,7 +29,7 @@
             <small class="form-text text-muted">Please provide your password.</small>
         </div><!-- /form-group -->
 
-        <button type="submit" class="btn btn-primary">Login</button>
+        <button class="submit-button" type="submit" class="btn btn-primary">Login</button>
     </form>
 </article>
 

@@ -59,83 +59,97 @@ const unfollowUser = () => {
     });
 };
 
-// // insert comment
-// const commentImgs = document.querySelectorAll(".comment-img");
-// commentImgs.forEach(commentImg => {
-//     const ID = commentImg.id;
-//     commentImg.addEventListener('click', event => {
-//         const commentsDiv = document.querySelector(`.comments-container-${ID}`);
-//         event.preventDefault();
-//         let existingText = "";
-//         if(document.querySelector(`.comment-${ID}`)) {
-//             let h6 = document.querySelector(`.comment-${ID}`);
-//             existingText = h6.innerHTML;
-//         }
-//         commentsDiv.innerHTML = "";
-//         const div = document.createElement('div');
-//         div.classList.add("comment-box");
-//         const h5 = document.createElement('h5');
-//         h5.classList.add("comment-user");
-//         h5.innerHTML = "<?= $_SESSION['user']['username'] ?>";
-//         div.appendChild(h5);
-//         const editForm = document.createElement('form');
-//         editForm.classList.add("edit-post-form");
-//         editForm.method = "post";
-//         editForm.innerHTML = `<input type="hidden" name="post-id" value="${ID}">
-//         <input id="updateField" type="text" name="post-text" value="${existingText}">
-//         <button class="edit-comment-button" type="submit">Update</button>`;
-//         div.appendChild(editForm);
-//         commentsDiv.appendChild(div);
-//         updateField.focus();
+function wait(ms){
+    var start = new Date().getTime();
+    var end = start;
+    while(end < start + ms) {
+      end = new Date().getTime();
+   }
+ }
 
-//         editForm.addEventListener('submit', event => {
-//             event.preventDefault();
-//             const formData = new FormData(editForm);
-//             fetch('/app/posts/update.php', {
-//                 method: 'POST',
-//                 body: formData
-//             })
-//             .then(response => response.json())
-//             .then(post => {
-//                 div.innerHTML = "";
-//                 if(post.postText!=="") {
-//                     const h5 = document.createElement('h5');
-//                     h5.classList.add("comment-user");
-//                     h5.innerHTML = "<?= $_SESSION['user']['username'] ?>";
-//                     div.appendChild(h5);
-//                     const h6 = document.createElement('h6');
-//                     h6.classList.add(`comment-${ID}`);
-//                     h6.innerHTML = post.postText;
-//                     div.appendChild(h6);
-//                 };
-//             });
-//         });
-//     }); 
-// });
+// Enter a comment
+const commentImgs = document.querySelectorAll(".comment-img");
+commentImgs.forEach(commentImg => {
+    const ID = commentImg.id;
+    commentImg.addEventListener('click', event => {
+        const commentsDiv = document.querySelector(`.comments-container-${ID}`);
+        const usernameElement = document.querySelector('.dummy-div');
+        const username = usernameElement.innerHTML;
+        event.preventDefault();
+        const div = document.createElement('div');
+        div.classList.add("comment-box");
+        const h5 = document.createElement('h5');
+        h5.classList.add("comment-user");
+        h5.innerHTML = username;
+        div.appendChild(h5);
+        const editForm = document.createElement('form');
+        editForm.classList.add("edit-post-form");
+        editForm.method = "post";
+        editForm.innerHTML = `<input type="hidden" name="post-id" value="${ID}">
+        <input id="updateField" type="text" name="comment-text">
+        <button class="edit-comment-button" type="submit">Post</button>`;
+        div.appendChild(editForm);
+        commentsDiv.appendChild(div);
+        updateField.focus();
 
-// // create comment
-// const commentImgs = document.querySelectorAll(".comment-img");
-// commentImgs.forEach(commentImg => {
-//     const ID = commentImg.id;
-//     commentImg.addEventListener('click', event => {
-//         event.preventDefault();
-//         const commentsDiv = document.querySelector(`.comments-container-${ID}`);
-//         const div = document.createElement('div');
-//         div.classList.add("comment-box");
-//         const h5 = document.createElement('h5');
-//         h5.classList.add("comment-user");
-//         h5.innerHTML = "<?= $_SESSION['user']['username'] ?>";
-//         div.appendChild(h5);
-//         const editForm = document.createElement('form');
-//         editForm.classList.add("edit-post-form");
-//         editForm.method = "post";
-//         editForm.innerHTML = `<input type="hidden" name="post-id" value="${ID}">
-//         <input id="updateField" type="text" name="post-text">
-//         <button class="edit-comment-button" type="submit">Update</button>`;
-//         div.appendChild(editForm);
-//         commentsDiv.appendChild(div);
-//         updateField.focus();
-//     });
-// });
+        editForm.addEventListener('submit', event => {
+            event.preventDefault();
+            const formData = new FormData(editForm);
+            fetch('/app/posts/comment.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(comment => {
+                div.innerHTML = "";
+                if(comment.commentText!=="") {
+                    const h5 = document.createElement('h5');
+                    h5.classList.add("comment-user");
+                    h5.innerHTML = username;
+                    div.appendChild(h5);
+                    const h6 = document.createElement('h6');
+                    h6.classList.add(`comment-${ID}`);
+                    h6.innerHTML = comment.commentText;
+                    div.appendChild(h6);
+                };
+            });
+        });
+    }); 
+});
+
+// Like a post
+let likeIMGs = document.querySelectorAll(".like-img");
+likeIMGs.forEach(likeIMG => {
+    const ID = likeIMG.id;
+    likeIMG.addEventListener('click', event => {
+        event.preventDefault();
+        const postIdDiv = document.querySelector('.dummy-post-div');
+        const postID = postIdDiv.innerHTML;
+        let liked = true;
+        if(likeIMG.src.includes("/assets/icons/like_inactive.svg")) {
+            likeIMG.src='/assets/icons/like_active.png';
+        } else {
+            likeIMG.src='/assets/icons/like_inactive.svg';
+            liked = false;
+        }
+        const likeForm = document.createElement('form');
+        likeForm.method = "post";
+        likeForm.innerHTML = `<input type="hidden" name="post-id" value="${ID}">
+        <input type="hidden" name="liked-user-id" value="${postID}">`;
+        if (liked) {
+            const likeFormData = new FormData(likeForm);
+            fetch("app/posts/like.php", {
+            method: 'POST',
+            body: likeFormData
+            });
+        } else {
+            const removeLikeFormData = new FormData(likeForm);
+            fetch("app/posts/removeLike.php", {
+            method: 'POST',
+            body: removeLikeFormData
+            });
+        };  
+    });
+});
 
 

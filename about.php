@@ -5,7 +5,21 @@
 
 <article>
     <h1>About</h1>
-    <p>This is the about page.</p>
+    <h4>Hi <?php echo $_SESSION['user']['firstname']; ?>!</h4>
+    <div class="about-div">
+    <p class="about-text">Welcome to </p><h3 class="title-heading about-title">Picture This</h3>
+    </div>
+    <p>Picture This is a social media platform that was developed as part of the Web Development course at Yrgo, Lindholmen 2019-2020.</p>
+    <p>The images uploaded are stills from films directed by Stanley Kubrick.</p>
+
+    <img class="kubrick" src="/assets/titleImages/kubrick.jpg" alt="kubrick">
+
+    <div class = "about-footer">
+    <h5>Developed by AltDom 2019.</h5>
+    <a href="https://github.com/AltDom"><img class="git" src="/assets/icons/github.svg" alt=""></a>
+</div>
 </article>
+
+
 
 <?php require __DIR__.'/views/footer.php'; ?>

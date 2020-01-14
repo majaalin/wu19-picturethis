@@ -9,6 +9,14 @@
     margin-bottom: 12px;
 }
 
+h1 {
+    margin-bottom: 20px; 
+}
+
+h4 {
+    margin-bottom: 15px;
+}
+
 h5 {
     margin: 0;
     font-weight: 500;
@@ -168,6 +176,16 @@ button {
     padding: 2px;
 }
 
+.edit-image-form {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 4px;
+}
+
+#editedIMG {
+    width: 75vw;
+}
+
 .edit-post-form {
     display: flex;
     justify-content: space-between;
@@ -254,3 +272,46 @@ input {
     color: crimson;
 }
 
+.dummy-div, .dummy-post-div {
+    display: none;
+}
+
+.title-heading {
+    font-family: BeautifulPeople;
+}
+
+.about-div {
+    display: flex;
+    align-items: flex-end;
+}
+
+.about-title {
+    margin-left: 10px;
+}
+
+.about-text {
+    margin-bottom: 8px;
+}
+
+.about-footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.git {
+    padding: 0 5px 5px 5px;
+    color: black;
+    width: 30px;
+}
+
+.upload-box {
+    display: flex;
+    justify-content: flex-end;    
+}
+
+.kubrick {
+    width: 92%;
+    margin: 20px 4%;
+}

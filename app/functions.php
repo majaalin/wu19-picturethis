@@ -258,16 +258,21 @@ if (!function_exists('getPostsByFollowings')) {
                 $finalPosts[]=$post;
             }
         }
+        // include the user's own posts
+        $posts=getPostsByUser((int) $_SESSION['user']['id'], $pdo);
+            foreach($posts as $post) {
+                $finalPosts[]=$post;
+            }
         usort($finalPosts,'sortByPostID');
         return $finalPosts;
     }
 }
 
-$titleImages = array('01.jpg', '02.jpg', '03.jpg', '04.jpg', '05.jpg'); // array of filenames
+$titleImages = array('01.jpg', '02.jpg', '03.png', '04.jpg'); // array of filenames
 $i = rand(0, count($titleImages)-1); // generate random number size of the array
 $randomImage = $titleImages[$i]; // set variable equal to which random filename was chosen
 
-$colors = array('darkred', 'aliceblue', '#555', 'rgb(234, 244, 35)');
+$colors = array('darkred', 'midnightblue', 'darkorange', 'darkslategrey');
 $j = rand(0, count($colors)-1); // generate random number size of the array
 $randomColor = $colors[$j]; // set variable equal to which random filename was chosen
 

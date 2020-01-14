@@ -7,12 +7,13 @@
 } ?>
 
 <article>
-
-    <h1 class='title-heading'><?php echo $config['title']; ?></h1>
-    <p>Sign up to share pictures with your friends.</p>
-    <div class="title-buttons-div">
-        <a href="/login.php"><button class="title-buttons">Login</button></a>
-        <a href="/create.php"><button class="title-buttons">Create Account</button></a>
+    <div class="all-index-text">
+        <h1 class='title-heading'><?php echo $config['title']; ?></h1>
+        <p class="text">Sign up to share pictures with your friends.</p>
+        <div class="title-buttons-div">
+            <a href="/login.php"><button class="title-buttons">Login</button></a>
+            <a href="/create.php"><button class="title-buttons">Create Account</button></a>
+        </div>
     </div>
 
 </article>

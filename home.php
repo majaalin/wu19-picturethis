@@ -2,6 +2,7 @@
 <?php require __DIR__.'/views/navigation.php'; ?>
 
 <div class="container py-5">
+<div class="dummy-div"><?= $_SESSION['user']['username']; ?></div>
 
 <?php $id = $_SESSION['user']['id'];
 $posts = getPostsByUser($id, $pdo); 
@@ -41,6 +42,7 @@ $followings = getNumFollowings($id, $pdo); ?>
     <?php foreach ($posts as $post) : 
         $liked = getLikesByPost($post["post_id"], $pdo);
         $comments = getComments($post["post_id"], $pdo); ?>
+        <div class="dummy-post-div"><?= $post['user_id']; ?></div>
         <div class = "post">
             <div class = 'post-header'>
                 <div class = 'post-profile-header'>
@@ -59,7 +61,10 @@ $followings = getNumFollowings($id, $pdo); ?>
                     </form>
                 </div>
             </div>
-            <img class = "post-img"  src="<?= '/app/database/posts/' . $post['post_image'] ?>" alt="post">
+            
+            <div class="postIMG">
+                <img class = "post-img"  src="<?= '/app/database/posts/' . $post['post_image'] ?>" alt="post">
+            </div>
             
             <div class = "like-comment-strip">
                 <img class = "like-img like-comment" id="<?= $post['post_id']; ?>" src="/assets/icons/<?= ($liked) ? "like_active.png" : "like_inactive.svg"; ?>" alt="like">
@@ -75,7 +80,7 @@ $followings = getNumFollowings($id, $pdo); ?>
                 <?php endif; ?>
                 <?php if($comments!==[]) : ?>
                     <?php foreach ($comments as $comment) : ?>
-                    <div class="comment-box">
+                    <div class="comment-box comment-boxes-<?= $post['post_id']; ?>">
                         <h5 class="comment-user"><?= $comment['username']; ?></h5>
                         <h6 class="comment-<?= $comment['comment_id']; ?>"><?= $comment['comment_text']; ?></h6>
                     </div>
@@ -89,12 +94,15 @@ $followings = getNumFollowings($id, $pdo); ?>
 
 <script>
     'use strict';
+
+    // Edit Post
     const imgs = document.querySelectorAll(".post-edit");
     imgs.forEach(img => {
         const ID = img.id;
         img.addEventListener('click', event => {
             const commentsDiv = document.querySelector(`.comments-container-${ID}`);
-            const usernameElement = document.querySelector('.username');
+            const commentBoxes = document.querySelectorAll(`.comment-boxes-${ID}`)
+            const usernameElement = document.querySelector('.dummy-div');
             const username = usernameElement.innerHTML;
             event.preventDefault();
             let existingText = "";
@@ -105,20 +113,57 @@ $followings = getNumFollowings($id, $pdo); ?>
             commentsDiv.innerHTML = "";
             const div = document.createElement('div');
             div.classList.add("comment-box");
+            const uploadDiv = document.createElement('div');
+            uploadDiv.classList.add("upload-box");
             const h5 = document.createElement('h5');
             h5.classList.add("post-text-user");
             h5.innerHTML = username;
-            div.appendChild(h5);
+            // This form for editing post text
             const editForm = document.createElement('form');
+            // This form for editing post image
+            const imageForm = document.createElement('form');
+            imageForm.enctype = "multipart/form-data";
+            imageForm.classList.add("edit-image-form");
+            imageForm.method = "post";
+            imageForm.innerHTML = `<input type="file" accept=".jpg, .jpeg, .png" name="editedIMG" id="editedIMG" required>
+            <input type="hidden" name="post-id" value="${ID}">
+            <button class="edit-comment-button" type="submit">Upload</button>`;
             editForm.classList.add("edit-post-form");
             editForm.method = "post";
             editForm.innerHTML = `<input type="hidden" name="post-id" value="${ID}">
             <input id="updateField" type="text" name="post-text" value="${existingText}">
             <button class="edit-comment-button" type="submit">Update</button>`;
+            uploadDiv.appendChild(imageForm);
+            div.appendChild(h5);
+            // Append both forms
             div.appendChild(editForm);
+            commentsDiv.appendChild(uploadDiv);
             commentsDiv.appendChild(div);
+            // Append previous post comments
+            commentBoxes.forEach(commentBox => {
+                commentsDiv.appendChild(commentBox);
+            });
             updateField.focus();
-    
+
+            // If post image form is submitted
+            imageForm.addEventListener('submit', event => {
+                event.preventDefault();
+                const imageFormData = new FormData(imageForm);
+                const editedIMG = document.getElementById('editedIMG');
+                imageFormData.append('editedIMG', editedIMG.files[0]);
+                fetch('/app/posts/editImage.php', {
+                    method: 'POST',
+                    body: imageFormData
+                })
+                .then(response => response.json())
+                .then(newPost => {
+                    // Small delay before reloading (to make time for the image to be saved)
+                    wait(500);
+                    location.reload();
+                });
+            });
+            
+            // If post text form is submitted
             editForm.addEventListener('submit', event => {
                 event.preventDefault();
                 const formData = new FormData(editForm);
@@ -128,6 +173,9 @@ $followings = getNumFollowings($id, $pdo); ?>
                 })
                 .then(response => response.json())
                 .then(post => {
+                    commentsDiv.innerHTML = "";
+                    const div = document.createElement('div');
+                    div.classList.add("comment-box");
                     div.innerHTML = "";
                     if(post.postText!=="") {
                         const h5 = document.createElement('h5');
@@ -138,93 +186,19 @@ $followings = getNumFollowings($id, $pdo); ?>
                         h6.classList.add(`comment-${ID}`);
                         h6.innerHTML = post.postText;
                         div.appendChild(h6);
+                        // Append new post text
+                        commentsDiv.appendChild(div);
+                        // Append previous post comments
+                        commentBoxes.forEach(commentBox => {
+                            commentsDiv.appendChild(commentBox);
+                        });
+                        // append comments
                     };
                 });
             });
         }); 
     });
 
-// insert comment
-const commentImgs = document.querySelectorAll(".comment-img");
-commentImgs.forEach(commentImg => {
-    const ID = commentImg.id;
-    commentImg.addEventListener('click', event => {
-        const commentsDiv = document.querySelector(`.comments-container-${ID}`);
-        const usernameElement = document.querySelector('.username');
-        const username = usernameElement.innerHTML;
-        event.preventDefault();
-        const div = document.createElement('div');
-        div.classList.add("comment-box");
-        const h5 = document.createElement('h5');
-        h5.classList.add("comment-user");
-        h5.innerHTML = username;
-        div.appendChild(h5);
-        const editForm = document.createElement('form');
-        editForm.classList.add("edit-post-form");
-        editForm.method = "post";
-        editForm.innerHTML = `<input type="hidden" name="post-id" value="${ID}">
-        <input id="updateField" type="text" name="comment-text">
-        <button class="edit-comment-button" type="submit">Post</button>`;
-        div.appendChild(editForm);
-        commentsDiv.appendChild(div);
-        updateField.focus();
-
-        editForm.addEventListener('submit', event => {
-            event.preventDefault();
-            const formData = new FormData(editForm);
-            fetch('/app/posts/comment.php', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(comment => {
-                div.innerHTML = "";
-                if(comment.commentText!=="") {
-                    const h5 = document.createElement('h5');
-                    h5.classList.add("comment-user");
-                    h5.innerHTML = username;
-                    div.appendChild(h5);
-                    const h6 = document.createElement('h6');
-                    h6.classList.add(`comment-${ID}`);
-                    h6.innerHTML = comment.commentText;
-                    div.appendChild(h6);
-                };
-            });
-        });
-    }); 
-});
-
-    let likeIMGs = document.querySelectorAll(".like-img");
-    likeIMGs.forEach(likeIMG => {
-        const ID = likeIMG.id;
-        likeIMG.addEventListener('click', event => {
-            event.preventDefault();
-            let liked = true;
-            if(likeIMG.src.includes("/assets/icons/like_inactive.svg")) {
-                likeIMG.src='/assets/icons/like_active.png';
-            } else {
-                likeIMG.src='/assets/icons/like_inactive.svg';
-                liked = false;
-            }
-            const likeForm = document.createElement('form');
-            likeForm.method = "post";
-            likeForm.innerHTML = `<input type="hidden" name="post-id" value="${ID}">
-            <input type="hidden" name="liked-user-id" value="<?= $_SESSION['user']['id']; ?>">`;
-            if (liked) {
-                const likeFormData = new FormData(likeForm);
-                fetch("app/posts/like.php", {
-                method: 'POST',
-                body: likeFormData
-                });
-            } else {
-                const removeLikeFormData = new FormData(likeForm);
-                fetch("app/posts/removeLike.php", {
-                method: 'POST',
-                body: removeLikeFormData
-                });
-            };  
-        });
-    });
 </script>
 
 <?php require __DIR__.'/views/footer.php'; 

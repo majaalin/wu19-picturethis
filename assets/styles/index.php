@@ -26,10 +26,27 @@ declare(strict_types=1); ?>
         text-align: center;
         border-width: 2px;
         margin-right: 15px;
+        margin-top: 4px; 
     }
 
     .title-heading {
         font-family: BeautifulPeople;
+        margin-bottom: 6px;
+        color: black;
     }
+
+    .text {
+        color: black;
+    }
+
+    .all-index-text {
+        margin-left: 10px;
+    }
+
+    button:hover {
+    background: rgb(255, 255, 255, 0.5);
+    /* color: rgb(255, 186, 46); */
+    border-color: white;
+  }
 
 </style>

@@ -20,7 +20,7 @@ require __DIR__.'/../app/autoload.php';
     <?php if($_SERVER['REQUEST_URI'] === '/' || $_SERVER['REQUEST_URI'] === '/index.php') : 
     require __DIR__."/../assets/styles/index.php";
     endif; ?>
-    <?php if($_SERVER['REQUEST_URI'] === '/login.php' || $_SERVER['REQUEST_URI'] === '/about.php' || $_SERVER['REQUEST_URI'] === '/post.php' || $_SERVER['REQUEST_URI'] === '/activity.php') : ?>
+    <?php if($_SERVER['REQUEST_URI'] === '/login.php' || $_SERVER['REQUEST_URI'] === '/post.php' || $_SERVER['REQUEST_URI'] === '/activity.php' || $_SERVER['REQUEST_URI'] === '/edit.php?') : ?>
     <link rel="stylesheet" href="/assets/styles/login.css">
     <?php endif; ?>
 </head>
