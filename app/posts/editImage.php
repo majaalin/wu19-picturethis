@@ -9,6 +9,11 @@ if(isset($_FILES['editedIMG'])) {
     $editedIMG = $_FILES['editedIMG'];
     $postID = intval($_POST['post-id']);
 
+    if (contains('-', $editedIMG['name']) || contains('.', $editedIMG['name'])) {
+        echo json_encode(['error' => 'Your replacement image must not contain characters "-" or "." in the title (other than .jpg, .jpeg or .png).'], 400);
+        exit;
+    };
+
     $queryFetchPosts = 'SELECT * FROM posts WHERE user_id = :user_id AND post_id = :post_id';
     $statement = $pdo->prepare($queryFetchPosts);
     $statement->execute([
@@ -21,6 +26,13 @@ if(isset($_FILES['editedIMG'])) {
     $postPath = $oldPostArray[0] . '.' . $newExtension[1];
     unlink(__DIR__.'/../database/posts/'.$oldPost['post_image']);
     move_uploaded_file($editedIMG['tmp_name'], __DIR__.'/../database/posts/'.$postPath);
+
+    $queryUpdatePostImage = 'UPDATE posts SET post_image = :post_image WHERE post_id = :post_id';
+    $statement = $pdo->prepare($queryUpdatePostImage);
+    $statement->execute([
+        ':post_id' => $postID,
+        ':post_image' => $postPath
+    ]);
 
     $newPost = [
         'postIMG' => $postPath,

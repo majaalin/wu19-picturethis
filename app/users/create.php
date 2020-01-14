@@ -44,6 +44,10 @@ if (isset($_POST['firstname'],$_POST['lastname'],$_POST['username'],$_POST['bio'
         $errors[] = 'The email you\'ve entered is already taken. Do you perhaps already have an account?';
         $_SESSION['errors'] = $errors;
         redirect('/create.php');
+    } elseif (contains('-', $username) || contains('.', $username)) {
+        $errors[] = 'The characters "-" or "." are not suited for a username.';
+        $_SESSION['errors'] = $errors;
+        redirect('/create.php');
     };
 
     // Create account and insert new user's details into the database.

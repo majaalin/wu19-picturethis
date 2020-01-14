@@ -21,6 +21,11 @@ if(isset($_POST['email'],$_POST['username'],$_POST['bio'])) {
     } else {
         $newUsername = $oldUsername;
     };
+    if (contains('-', $newUsername) || contains('.', $newUsername)) {
+        $errors[] = 'The characters "-" or "." are not suited for a username.';
+        $_SESSION['errors'] = $errors;
+        redirect('/edit.php');
+    };
     if($_POST['bio']!=='') {
         $newBio = trim(filter_var($_POST['bio'], FILTER_SANITIZE_STRING));
     } else {

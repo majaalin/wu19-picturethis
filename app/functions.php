@@ -35,6 +35,20 @@ if (!function_exists('getPosts')) {
     }
 }
 
+if (!function_exists('contains')) {
+    /**
+     * Returns true if the needle is in the haystack
+     *
+     * @param string $needle
+     * @param string $haystack
+     * @return bool
+     */
+    function contains($needle, $haystack): bool
+    {
+        return strpos($haystack, $needle) !== false;
+    }
+}
+
 if (!function_exists('getAllPosts')) {
     /**
      * Get all posts 

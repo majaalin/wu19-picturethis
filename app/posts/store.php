@@ -16,6 +16,11 @@ if (isset($_FILES['post'])) {
         $_SESSION['errors'] = $errors;
         redirect('/post.php');
     };
+    if (contains('-', $post['name']) || contains('.', $post['name'])) {
+        $errors[] = 'Remove the characters "-" and "." from the image name you\'re trying to upload.';
+        $_SESSION['errors'] = $errors;
+        redirect('/post.php');
+    };
     $user = $_SESSION['user'];
     $extension = explode('.', $post['name']);
     $date = date('Y-m-d H:i:s');

@@ -27,6 +27,12 @@ if(isset($_POST['post-id'])) {
     $statement = $pdo->prepare($queryDeleteLikes);
     $statement->bindParam(':post_id', $postID, PDO::PARAM_INT);
     $statement->execute();
+
+    // Delete comments associated with post
+    $queryDeleteComments = sprintf('DELETE FROM comments WHERE post_id = :post_id');
+    $statement = $pdo->prepare($queryDeleteComments);
+    $statement->bindParam(':post_id', $postID, PDO::PARAM_INT);
+    $statement->execute();
 }
 
 redirect('/home.php');
