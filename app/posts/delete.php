@@ -4,7 +4,7 @@ require __DIR__.'/../autoload.php';
 // This file is called when a selected post is deleted from a user's profile & the database.
 
 if(isset($_POST['post-id'])) {
-    $postID = $_POST['post-id'];
+    $postID = intval(filter_var($_POST['post-id'],FILTER_SANITIZE_NUMBER_INT));
 
     // Fetch and delete image from database
     $queryFetchPost = sprintf('SELECT * FROM posts WHERE post_id = :post_id');

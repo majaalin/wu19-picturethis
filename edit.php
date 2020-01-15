@@ -69,7 +69,7 @@
                     endif;
 
                 endif; ?>
-                <img class='upload-image' src="<?= '/app/database/avatars/'. $avatarPath; ?>" alt="<?= $_SESSION['user']['username']; ?>">    
+                <img class="upload-image" src="<?= '/app/database/avatars/'. $avatarPath; ?>" alt="<?= $_SESSION['user']['username']; ?>">    
             <?php endif; ?>
             <input type="file" accept=".jpg, .jpeg, .png" name="avatar" id="avatar" required> 
             </div>
@@ -95,7 +95,7 @@
             <small class="form-text text-muted">Want to have a tagline?</small>
         </div><!-- /form-group -->
 
-        <div class = 'buttons'>
+        <div class = "buttons">
             <button type="submit" value='update'>Save Changes</button>
         </div>
     </form>

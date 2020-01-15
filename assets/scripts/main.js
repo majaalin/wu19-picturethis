@@ -1,5 +1,6 @@
 'use strict';
 
+// This section of code toggles the footer nav items
 const footerDiv = document.querySelector('.footer-icons');
 const footerATags = footerDiv.querySelectorAll('a');
 footerATags.forEach(element => {
@@ -18,6 +19,7 @@ footerATags.forEach(element => {
     }
 });
 
+// This function is called when a user is unfollowed
 const followUser = () => {
     const followDiv = document.querySelector(".follow-div");
     const followers = document.querySelector(".numFollowers");
@@ -39,6 +41,7 @@ const followUser = () => {
     });
 } 
 
+// This function is called when a user is unfollowed
 const unfollowUser = () => {
     const followDiv = document.querySelector(".follow-div");
     const followers = document.querySelector(".numFollowers");
@@ -59,6 +62,7 @@ const unfollowUser = () => {
     });
 };
 
+// Call this function to invoke a delay
 function wait(ms){
     var start = new Date().getTime();
     var end = start;
@@ -67,7 +71,7 @@ function wait(ms){
    }
  }
 
-// Enter a comment
+// This section of code is used for when a comment is entered on a post
 const commentImgs = document.querySelectorAll(".comment-img");
 commentImgs.forEach(commentImg => {
     const ID = commentImg.id;
@@ -117,7 +121,7 @@ commentImgs.forEach(commentImg => {
     }); 
 });
 
-// Like a post
+// This section of code is for when a post is liked or unliked
 let likeIMGs = document.querySelectorAll(".like-img");
 likeIMGs.forEach(likeIMG => {
     const ID = likeIMG.id;

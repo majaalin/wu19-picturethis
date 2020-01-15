@@ -7,7 +7,7 @@ header('Content-Type: application/json');
 
 if(isset($_FILES['editedIMG'])) {
     $editedIMG = $_FILES['editedIMG'];
-    $postID = intval($_POST['post-id']);
+    $postID = intval(filter_var($_POST['post-id'], FILTER_SANITIZE_NUMBER_INT));
 
     $newExtension = explode('.', $editedIMG['name']);
     if (contains('-', $newExtension[0]) || contains('.', $newExtension[0])) {
