@@ -219,11 +219,13 @@ input {
 
 .post-text-user {
     color: darkred;
+    padding-right: 6px;
 }
 
 .comment-user {
     font-size: 14px;
     padding-top: 2px;
+    padding-right: 6px;
 }
 
 .comment {

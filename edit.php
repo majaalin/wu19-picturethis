@@ -21,17 +21,21 @@
             <?php if(!isset($_FILES['avatar'])) : ?>
                 <label for="avatar">Select your profile picture to upload</label>
             <?php else : 
-                $avatar = $_FILES['avatar']; 
+                $avatar = $_FILES['avatar'];
+                $extension = explode('.', $avatar['name']); 
                 if (!in_array($avatar['type'], ['image/jpeg', 'image/png'])) : ?>
                     <p class="errors">The uploaded file type is not allowed.</p>
                 <?php elseif ($avatar['size'] > 2097152) : ?>
                     <p class="errors">The uploaded file exceeds the 2MB filesize limit.</p>
-                <?php else :
+                <?php elseif (contains('-', $extension[0]) || contains('.', $extension[0])) : 
+                    $errors[] = 'Remove the characters "-" and "." from the image name you\'re trying to upload.';
+                    $_SESSION['errors'] = $errors;
+                    redirect('/edit.php');
+                else :
                     if(isset($_SESSION['avatar'])) :
                         unlink(__DIR__.'/app/database/avatars/'.$_SESSION['avatar']);
                     endif;
                     $user = $_SESSION['user'];
-                    $extension = explode('.', $avatar['name']);
                     $avatarPath = $user['username'] . '.' . $extension[1];
                     move_uploaded_file($avatar['tmp_name'], __DIR__.'/app/database/avatars/'.$avatarPath);
                     $_SESSION['avatar'] = $avatarPath;
