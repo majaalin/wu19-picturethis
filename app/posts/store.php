@@ -6,7 +6,7 @@ require __DIR__.'/../autoload.php';
 $errors = [];
 
 if (isset($_FILES['post'])) {
-    $post = $_FILES['post']; 
+    $post = $_FILES['post'];
     if (!in_array($post['type'], ['image/jpeg', 'image/png'])) {
         $errors[] = 'The uploaded file type is not allowed.';
         $_SESSION['errors'] = $errors;
@@ -16,19 +16,19 @@ if (isset($_FILES['post'])) {
         $_SESSION['errors'] = $errors;
         redirect('/post.php');
     };
-    if (contains('-', $post['name']) || contains('.', $post['name'])) {
+    $extension = explode('.', $post['name']);
+    if (contains('-', $extension[0]) || contains('.', $extension[0])) {
         $errors[] = 'Remove the characters "-" and "." from the image name you\'re trying to upload.';
         $_SESSION['errors'] = $errors;
         redirect('/post.php');
     };
-    $user = $_SESSION['user'];
-    $extension = explode('.', $post['name']);
-    $date = date('Y-m-d H:i:s');
     if (isset($_POST['caption'])) {
         $caption = trim(filter_var($_POST['caption'],FILTER_SANITIZE_STRING));
     } else {
         $caption = "";
     };
+    $user = $_SESSION['user'];
+    $date = date('Y-m-d H:i:s');
 
     // Fetch all previously posted posts (to check how many there are)
     $queryFetchPosts = 'SELECT * FROM posts WHERE user_id = :user_id';

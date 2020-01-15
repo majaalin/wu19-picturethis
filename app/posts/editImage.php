@@ -9,7 +9,8 @@ if(isset($_FILES['editedIMG'])) {
     $editedIMG = $_FILES['editedIMG'];
     $postID = intval($_POST['post-id']);
 
-    if (contains('-', $editedIMG['name']) || contains('.', $editedIMG['name'])) {
+    $newExtension = explode('.', $editedIMG['name']);
+    if (contains('-', $newExtension[0]) || contains('.', $newExtension[0])) {
         echo json_encode(['error' => 'Your replacement image must not contain characters "-" or "." in the title (other than .jpg, .jpeg or .png).'], 400);
         exit;
     };
