@@ -157,9 +157,13 @@ $followings = getNumFollowings($id, $pdo); ?>
                 })
                 .then(response => response.json())
                 .then(newPost => {
+                    if (newPost.error) {
+                        console.log(newPost.error)
+                    } else {
                     // Small delay before reloading (to make time for the image to be saved)
                     wait(500);
                     location.reload();
+                    };
                 });
             });
             
