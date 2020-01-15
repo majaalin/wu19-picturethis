@@ -32,7 +32,8 @@ Code review made by [Andreas Pandzic](https://github.com/APandzic)
 * Main.js 21 and42. The followUser and unfollowUser functions repeat a lot of code and could have been merged.
 * App/posts/delete.php 7. It's good practice to always sanitise incoming values to the backend. ( You can never be too sure, and so you don't miss sanitising it the times you really need too).
 *  App/posts/delete.php 10, 20, 16 and 32. Try to merge as many queries as possible, this will make your code much faster. 
-* App/users/delete.php 9, 15, 26, 32, 38 and 44. Try to merge as many queries as possible, this will make your code much faster. It was a pleasure to read your code mate! Keep up your awesome work.
+* App/users/delete.php 9, 15, 26, 32, 38 and 44. Try to merge as many queries as possible, this will make your code much faster.  
+It was a pleasure to read your code mate! Keep up your awesome work.
 
 ## License
 This assignment is licensed under the MIT License. You can get all the details [here](https://github.com/AltDom/wu19-picturethis/blob/master/LICENSE). 
