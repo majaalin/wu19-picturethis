@@ -223,6 +223,7 @@ input {
 
 .comment-user {
     font-size: 14px;
+    padding-top: 2px;
 }
 
 .comment {
@@ -242,7 +243,7 @@ input {
 }
 
 .post {
-    border-bottom: 1px solid #555;
+    border-bottom: 2px solid #555;
     padding-bottom: 8px;
 }
 
@@ -318,4 +319,30 @@ input {
 
 .form-control {
     border: 1px solid darkred;
+}
+
+@media only screen and (min-width: 1000px) and (-webkit-min-device-pixel-ratio: 1) {
+    .like-comment {
+        width: 80px;
+    }
+
+    h5 {
+        font-size: 25px;
+    }
+
+    .comment-user {
+        font-size: 20px;
+    }
+
+    h6 {
+        font-size: 18px;
+    }
+
+    .container {
+        width: 55%;
+    }
+
+    .form-control {
+        border: 2px solid darkred;
+    }
 }
