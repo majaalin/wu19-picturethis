@@ -137,7 +137,7 @@ $followings = getNumFollowings($id, $pdo); ?>
             div.appendChild(h5);
             // Append both forms
             div.appendChild(editForm);
-            commentsDiv.appendChild(uploadDiv);
+            commentsDiv.appendChild(imageForm);
             commentsDiv.appendChild(div);
             // Append previous post comments
             commentBoxes.forEach(commentBox => {

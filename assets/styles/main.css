@@ -178,17 +178,17 @@ button {
 
 .edit-image-form {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
+    flex-grow: 1;
     margin-bottom: 4px;
 }
 
-#editedIMG {
-    width: 75vw;
-}
+
 
 .edit-post-form {
     display: flex;
     justify-content: space-between;
+    flex-grow: 1;
 }
 
 .like-comment {
@@ -211,6 +211,7 @@ button {
 
 input {
     margin-bottom: 1px;
+    max-width: 80%;
 }
 
 .post-user {
