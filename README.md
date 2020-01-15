@@ -16,7 +16,6 @@ This is an image-based social media platform called **Picture This**. It's a mob
 * Enter the project folder using the command `cd wu19-picturethis/`.
 * Create a local server using the command `php -S localhost:8000`.
 * Open your browser of choice and go to the url `localhost:8000`.
-* Remember to keep reloading the page!
 
 ## Testers
 * Camilla Kylmänen Sjörén
