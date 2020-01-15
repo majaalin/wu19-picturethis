@@ -315,3 +315,7 @@ input {
     width: 92%;
     margin: 20px 4%;
 }
+
+.form-control {
+    border: 1px solid darkred;
+}
