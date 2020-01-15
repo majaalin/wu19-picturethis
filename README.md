@@ -4,10 +4,12 @@
   <img  src="https://media.giphy.com/media/BFPW5ugXi6ltm/giphy.gif" width="80%">
 </p>
 
-This is an image-based social media platform called **Picture This**. It's a mobile-first responsive project that combines HTML, CSS, (vanilla) JavaScript, PHP and SQLite. Bootstrap was also used as a graphical user interface.
+This is an image-based social media platform called **Picture This**. It's a mobile-first responsive project that combines HTML, CSS, (vanilla) JavaScript, PHP and a SQLite database. Bootstrap was also used as a graphical user interface.
 
 ## About This Project
-* Create an account to start sharing captioned images with whoever else logs into the database. Leave comments & likes on posts and follow other user profiles. A few of the characters from Stanley Kubrick's films have already created accounts. 
+* Create an account to start sharing captioned images with whoever else logs into the database. 
+* Leave comments & likes on posts and follow other user profiles. 
+* A few of the characters from Stanley Kubrick's films have already created accounts. 
 
 ## Clone the Project Files
 * Clone the repository using `git clone https://github.com/AltDom/wu19-picturethis.git` in your chosen bash terminal.
