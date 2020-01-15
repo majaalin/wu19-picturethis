@@ -12,6 +12,7 @@ This is an image-based social media platform called **Picture This**. It's a mob
 ## Clone the Project Files
 * Clone the repository using `git clone https://github.com/AltDom/wu19-picturethis.git` in your chosen bash terminal.
 * Enter the project folder using the command `cd wu19-picturethis/`.
+* Create a local server using the command `php -S localhost:8000`.
 * Open your browser of choice and go to the url `localhost:8000`.
 * Remember to keep reloading the page!
 
