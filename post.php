@@ -1,13 +1,17 @@
 <?php require __DIR__.'/views/header.php'; ?>
 <?php require __DIR__.'/views/navigation.php'; ?>
 
-<div class="container py-5">
+<?php if(!isset($_SESSION['user'])) {
+    redirect("/");
+} ?>
 
 <?php if(isset($_SESSION['errors'])) {
     $errors = $_SESSION['errors'];
 } else {
     $errors = [];
 } ?>
+
+<div class="container py-5">
 
 <article>
     <h1>Post</h1>

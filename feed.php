@@ -1,6 +1,10 @@
 <?php require __DIR__.'/views/header.php'; ?>
 <?php require __DIR__.'/views/navigation.php'; ?>
 
+<?php if(!isset($_SESSION['user'])) {
+    redirect("/");
+} ?>
+
 <div class="container py-5">
 <div class="dummy-div"><?= $_SESSION['user']['username']; ?></div>
 

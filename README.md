@@ -8,7 +8,7 @@ This is an image-based social media platform called **Picture This**. It's a mob
 
 ## About This Project
 * Create an account to start sharing captioned images with whoever else logs into the database. 
-* Leave comments & likes on posts and follow other user profiles. 
+* Leave comments & likes on posts and follow other users' profiles. 
 * A few of the characters from Stanley Kubrick's films have already created accounts. 
 
 ## Clone the Project Files

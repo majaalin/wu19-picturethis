@@ -3,6 +3,10 @@
 
 <div class="container py-5">
 
+<?php if(!isset($_SESSION['user'])) {
+    redirect("/");
+} ?>
+
 <?php if(isset($_SESSION['errors'])) {
     $errors = $_SESSION['errors'];
 } else {
