@@ -64,7 +64,7 @@
                 </div>
             </div>
             <img class = "post-img"  src="<?= '/app/database/posts/' . $post['post_image']; ?>" alt="post">
-                <div class = "like-comment-strip">
+            <div class = "like-comment-strip">
                 <img class = "like-img like-comment" id="<?= $post['post_id']; ?>" src="/assets/icons/<?= ($liked) ? "like_active.png" : "like_inactive.svg"; ?>" alt="like">
                 <a href="#"><img class = "like-comment comment-img" id="<?= $post['post_id']; ?>" src="/assets/icons/comment.svg" alt="comment"></a>
             </div>
@@ -84,6 +84,7 @@
                 </div>
                 <?php endforeach; ?>
             <?php endif; ?>
+            </div>
         </div>
     <?php endforeach; ?>
 </article>
