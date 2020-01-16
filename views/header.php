@@ -44,8 +44,10 @@ require __DIR__.'/../app/autoload.php';
         <?php endif; ?>
     <?php endif; ?>
     <?php if($_SERVER['REQUEST_URI'] === '/home.php') : 
-        $posts = getPostsByUser($_SESSION['user']['id'],$pdo); ?>
+        $posts = getPostsByUser($_SESSION['user']['id'],$pdo); 
+        if(count($posts)<2) : ?>
         <link rel="stylesheet" href="/assets/styles/login.css">
+        <?php endif; ?>
     <?php endif; ?>
 
 </head>
