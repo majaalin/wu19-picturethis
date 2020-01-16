@@ -11,7 +11,7 @@
 <?php if(isset($_SESSION['profileID'])) {
     $id = $_SESSION['profileID'];
     $user = getUserByID($id, $pdo);
-    $posts = getPostsByUser($id,$pdo);
+    // $posts = getPostsByUser($id,$pdo);
     $avatar = getAvatar($id, $pdo);
     $followers = getNumFollowers($id, $pdo);
     $followings = getNumFollowings($id, $pdo); 
@@ -89,7 +89,7 @@
 </article>
 
 <?php } else {
-    $posts = getPostsByFollowings($_SESSION['user']['id'], $pdo); ?>
+    // $posts = getPostsByFollowings($_SESSION['user']['id'], $pdo); ?>
 
 <article>
     <?php foreach ($posts as $post) : ?>
@@ -107,7 +107,7 @@
                     <input type="hidden" name="profileID" value="<?= $id; ?>">
                     <input type="hidden" name="return-url" value="/feed.php">
                     <div onclick="document.getElementById('<?= $post['post_id']; ?>').submit();" class = "post-profile-header">
-                        <img id="<?= $post['post_id']; ?>" class="post-avatar" src="<?= (isset($avatar) ? '/app/database/avatars/' . $avatar['image'] : '/assets/icons/noprofile.png'); ?>" alt="avatar">
+                        <img id="<?= $post['post_id']; ?>" class="post-avatar" src="<?= (!empty($avatar) ? '/app/database/avatars/' . $avatar['image'] : '/assets/icons/noprofile.png'); ?>" alt="avatar">
                         <h5 id="<?= $post['post_id']; ?>" class="post-user"><?= $username ?></h5>
                     </div>
                 </form>

@@ -23,6 +23,31 @@ require __DIR__.'/../app/autoload.php';
     <?php if($_SERVER['REQUEST_URI'] === '/login.php' || $_SERVER['REQUEST_URI'] === '/post.php' || $_SERVER['REQUEST_URI'] === '/activity.php' || $_SERVER['REQUEST_URI'] === '/edit.php?') : ?>
     <link rel="stylesheet" href="/assets/styles/login.css">
     <?php endif; ?>
+    <?php if($_SERVER['REQUEST_URI'] === '/search.php') : 
+        if(isset($_SESSION['profileID'])) :
+            $posts = getPostsByUser($_SESSION['profileID'],$pdo);
+        else :
+            $posts = getAllPosts($pdo);
+        endif;
+        if(count($posts)<2) : ?>
+        <link rel="stylesheet" href="/assets/styles/login.css">
+        <?php endif; ?>
+    <?php endif; ?>
+    <?php if($_SERVER['REQUEST_URI'] === '/feed.php') : 
+        if(isset($_SESSION['profileID'])) :
+            $posts = getPostsByUser($_SESSION['profileID'],$pdo);
+        else :
+            $posts = getPostsByFollowings($_SESSION['user']['id'],$pdo);
+        endif;
+        if(count($posts)<2) : ?>
+        <link rel="stylesheet" href="/assets/styles/login.css">
+        <?php endif; ?>
+    <?php endif; ?>
+    <?php if($_SERVER['REQUEST_URI'] === '/home.php') : 
+        $posts = getPostsByUser($_SESSION['user']['id'],$pdo); ?>
+        <link rel="stylesheet" href="/assets/styles/login.css">
+    <?php endif; ?>
+
 </head>
 
 <body>

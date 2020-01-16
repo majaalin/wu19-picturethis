@@ -11,7 +11,7 @@
 <?php if(isset($_SESSION['profileID'])) {
     $id = $_SESSION['profileID'];
     $user = getUserByID($id, $pdo);
-    $posts = getPostsByUser($id,$pdo);
+    // $posts = getPostsByUser($id,$pdo);
     $avatar = getAvatar($id, $pdo);
     $followers = getNumFollowers($id, $pdo);
     $followings = getNumFollowings($id, $pdo); 
@@ -59,7 +59,7 @@
         <div class = "<?= $username; ?>-post post">
             <div class = 'post-header'>
                 <div class = "post-profile-header">
-                    <img class="post-avatar" src="<?= (($avatar!==null) ? '/app/database/avatars/' . $avatar['image'] : '/assets/icons/noprofile.png'); ?>" alt="avatar">
+                    <img class="post-avatar" src="<?= ((!empty($avatar)) ? '/app/database/avatars/' . $avatar['image'] : '/assets/icons/noprofile.png'); ?>" alt="avatar">
                     <h5 class="post-user"><?= $username ?></h5>
                 </div>
             </div>
@@ -90,9 +90,13 @@
 </article>
 
 <?php } else {
-    $posts = getAllPosts($pdo); ?>
+    // $posts = getAllPosts($pdo); ?>
 
 <article>
+    <!-- The next three lines of text to be deleted. -->
+    <p>Hi <?php echo $_SESSION['user']['firstname']; ?>!</p> 
+    <p>A search bar is currently under developement. For now you can scroll through all posts and interact with them as you would in the feed.</p>
+    <hr>
     <?php foreach ($posts as $post) : ?>
         <?php $id = $post['user_id'];
         $avatar = getAvatar($id, $pdo); 
