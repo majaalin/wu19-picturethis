@@ -1,1 +1,8 @@
 .DS_Store
+app/posts/searchUser.php
+app/users.php
+app/users/searchUser.php
+feed.php
+search-results.php
+search.php
+views/header.php

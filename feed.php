@@ -103,7 +103,7 @@
         <div class="dummy-post-div"><?= $id; ?></div> 
         <div class = "<?= $username; ?>-post post">
             <div class = 'post-header'>
-                <form id="<?= $post['post_id']; ?>" action="app/posts/searchUser.php" method="post">
+                <form id="<?= $post['post_id']; ?>" action="app/users/searchUser.php" method="post">
                     <input type="hidden" name="profileID" value="<?= $id; ?>">
                     <input type="hidden" name="return-url" value="/feed.php">
                     <div onclick="document.getElementById('<?= $post['post_id']; ?>').submit();" class = "post-profile-header">

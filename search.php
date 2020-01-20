@@ -15,7 +15,7 @@
     $avatar = getAvatar($id, $pdo);
     $followers = getNumFollowers($id, $pdo);
     $followings = getNumFollowings($id, $pdo); 
-    $isFollowing = FollowByID($id, $_SESSION['user']['id'], $pdo); ?>
+    $isFollowing = FollowByID($id, $_SESSION['user']['id'], $pdo);?>
 
 <article>
     
@@ -57,7 +57,7 @@
 
         <div class="dummy-post-div"><?= $id; ?></div>
         <div class = "<?= $username; ?>-post post">
-            <div class = 'post-header'>
+            <div class = 'user'>
                 <div class = "post-profile-header">
                     <img class="post-avatar" src="<?= ((!empty($avatar)) ? '/app/database/avatars/' . $avatar['image'] : '/assets/icons/noprofile.png'); ?>" alt="avatar">
                     <h5 class="post-user"><?= $username ?></h5>
@@ -94,56 +94,87 @@
 
 <article>
     <!-- The next three lines of text to be deleted. -->
-    <p>Hi <?php echo $_SESSION['user']['firstname']; ?>!</p> 
-    <p>A search bar is currently under developement. For now you can scroll through all posts and interact with them as you would in the feed.</p>
-    <hr>
-    <?php foreach ($posts as $post) : ?>
-        <?php $id = $post['user_id'];
-        $avatar = getAvatar($id, $pdo); 
-        $usernameArray = explode('-',$post['post_image']);
-        $username = $usernameArray[0];
-        $comments = getComments($post["post_id"], $pdo);
-        $liked = getLikesByPost($post["post_id"], $pdo) ?>
+    <h1>Search</h1>
+    <form class="search" action="/app/users/searchUser.php" method="get">
+        <input class="form-control search" type="text" name="search" placeholder="Search for a user"> 
+    </form>
 
-        <div class="dummy-post-div"><?= $id; ?></div>
-        <div class = "<?= $username; ?>-post post">
-            <div class = 'post-header'>
-                <form id="<?= $post['post_id']; ?>" action="app/posts/searchUser.php" method="post">
+        <!-- Shows if user get an error -->
+        <ul class="error-container">
+<?php foreach ($errors as $error) : ?>
+    <li class="errors">&#9747; <?php echo $error ?></li>
+<?php endforeach ?>
+</ul>
+
+    <?php if (!$users): ?>
+        <?php 
+    $statement = $pdo->prepare('SELECT * FROM users');
+    $statement->execute();
+    $otherUsers = $statement->fetchAll(PDO::FETCH_ASSOC); ?> 
+
+    <?php 
+    foreach ($otherUsers as $otherUser) :
+    $id = $otherUser['id'];
+    $avatar = getAvatar($id, $pdo); ?>
+
+<div class="dummy-post-div"><?= $id; ?></div>
+        <div class = "<?= $otherUser['username']; ?>">
+            <div class = 'user'>
+                <form id="<?= $id; ?>" action="app/users/searchUser.php" method="post">
                     <input type="hidden" name="profileID" value="<?= $id; ?>">
                     <input type="hidden" name="return-url" value="/search.php">
-                    <div onclick="document.getElementById('<?= $post['post_id']; ?>').submit();" class = "post-profile-header">
-                        <img id="<?= $post['post_id']; ?>" class="post-avatar" src="<?= (($avatar!==[]) ? '/app/database/avatars/' . $avatar['image'] : '/assets/icons/noprofile.png'); ?>" alt="avatar">
-                        <h5 id="<?= $post['post_id']; ?>" class="post-user"><?= $username ?></h5>
+                    <div onclick="document.getElementById('<?= $id; ?>').submit();" class = "post-profile-header">
+                        <img id="<?= $id; ?>" class="post-avatar" src="<?= (($avatar!==[]) ? '/app/database/avatars/' . $avatar['image'] : '/assets/icons/noprofile.png'); ?>" alt="avatar">
+                        <h5 id="<?= $id; ?>" class="post-user"><?= $otherUser['username'] ?></h5>
                     </div>
                 </form>
             </div>
+<?php endforeach ?>
 
-            <img class = "post-img"  src="<?= '/app/database/posts/' . $post['post_image']; ?>" alt="post">
-            
-            <div class = "like-comment-strip">
-                <img class = "like-img like-comment" id="<?= $post['post_id']; ?>" src="/assets/icons/<?= ($liked) ? "like_active.png" : "like_inactive.svg"; ?>" alt="like">
-                <a href="#"><img class = "like-comment comment-img" id="<?= $post['post_id']; ?>" src="/assets/icons/comment.svg" alt="comment"></a>
+        <?php else : ?>
+    <!-- View results from search -->
+
+<?php foreach ($users as $user) : 
+    $id = $user['id'];
+    $avatar = getAvatar($id, $pdo); ?>
+
+<div class="dummy-post-div"><?= $id; ?></div>
+        <div class = "<?= $username; ?>">
+            <div class = 'user'>
+                <form id="<?= $id; ?>" action="app/users/searchUser.php" method="post">
+                    <input type="hidden" name="profileID" value="<?= $id; ?>">
+                    <input type="hidden" name="return-url" value="/search.php">
+                    <div onclick="document.getElementById('<?= $id; ?>').submit();" class = "post-profile-header">
+                        <img id="<?= $id; ?>" class="post-avatar" src="<?= (($avatar!==[]) ? '/app/database/avatars/' . $avatar['image'] : '/assets/icons/noprofile.png'); ?>" alt="avatar">
+                        <h5 id="<?= $id; ?>" class="post-user"><?= $user['username'] ?></h5>
+                    </div>
+                </form>
             </div>
-            
-            <div class="comments-container comments-container-<?= $post['post_id']; ?>">
-            <?php if($post['post_text']!=="") : ?>
-                <div class="comment-box">
-                    <h5 class="post-text-user"><?= $username; ?></h5>
-                    <h6 class="comment-<?= $post['post_id']; ?>"><?= $post['post_text'] ?></h6>
-                </div>
-            <?php endif; ?>
-            <?php if($comments!==[]) : ?>
-                <?php foreach ($comments as $comment) : ?>
-                <div class="comment-box">
-                    <h5 class="comment-user"><?= $comment['username']; ?></h5>
-                    <h6 class="comment-<?= $comment['comment_id']; ?>"><?= $comment['comment_text']; ?></h6>
-                </div>
-                <?php endforeach; ?>
-            <?php endif; ?>
+<?php endforeach ?>
+<?php 
+    $statement = $pdo->prepare('SELECT * FROM users WHERE id != :id');
+    $statement->bindParam(':id', $id, PDO::PARAM_INT);
+    $statement->execute();
+    $otherUsers = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-        </div>
-    </div>
-    <?php endforeach; ?>
+    foreach ($otherUsers as $otherUser) :
+    $id = $otherUser['id'];
+    $avatar = getAvatar($id, $pdo); ?>
+
+<div class="dummy-post-div"><?= $id; ?></div>
+        <div class = "<?= $otherUser['username']; ?>">
+            <div class ='user other'>
+                <form id="<?= $id; ?>" action="app/users/searchUser.php" method="post">
+                    <input type="hidden" name="profileID" value="<?= $id; ?>">
+                    <input type="hidden" name="return-url" value="/search.php">
+                    <div onclick="document.getElementById('<?= $id; ?>').submit();" class = "post-profile-header">
+                        <img id="<?= $id; ?>" class="post-avatar" src="<?= (($avatar!==[]) ? '/app/database/avatars/' . $avatar['image'] : '/assets/icons/noprofile.png'); ?>" alt="avatar">
+                        <h5 id="<?= $id; ?>" class="post-user"><?= $otherUser['username'] ?></h5>
+                    </div>
+                </form>
+            </div>
+<?php endforeach ?>
+<?php endif; ?>
 </article>
 
 <?php } ?>

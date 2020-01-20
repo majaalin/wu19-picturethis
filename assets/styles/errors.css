@@ -1,0 +1,28 @@
+.errors {
+  background-color: darkred;
+  padding: 1.4rem 0;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100vw;
+  animation: messages-animation 3s 3s forwards ease;
+  font-size: 14px;
+  list-style: none;
+  color: white;
+  font-weight: 500;
+  z-index: 5;
+  left: 0;
+  top: 0;
+  border-radius: 2px;
+  margin: 0;
+}
+
+@keyframes messages-animation {
+  0% {
+    top: 0;
+  }
+  100% {
+    top: -300px;
+  }
+}
