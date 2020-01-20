@@ -1,5 +1,5 @@
-.errors {
-  background-color: darkred;
+.messages {
+  background-color: burlywood;
   padding: 1.4rem 0;
   position: absolute;
   display: flex;
@@ -16,6 +16,10 @@
   top: 0;
   border-radius: 2px;
   margin: 0;
+}
+
+.errors {
+  background-color: darkred;
 }
 
 @keyframes messages-animation {

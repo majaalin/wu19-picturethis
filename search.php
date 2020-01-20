@@ -102,7 +102,7 @@
         <!-- Shows if user get an error -->
         <ul class="error-container">
 <?php foreach ($errors as $error) : ?>
-    <li class="errors">&#9747; <?php echo $error ?></li>
+    <li class="messages errors">&#9747; <?php echo $error ?></li>
 <?php endforeach ?>
 </ul>
 

@@ -47,6 +47,7 @@
             <?php endif; ?>
         </div>
     </div>
+
     <?php foreach ($posts as $post) : 
         $liked = getLikesByPost($post["post_id"], $pdo);
         $comments = getComments($post["post_id"], $pdo); ?>
@@ -91,6 +92,12 @@
 <?php } else {
     // $posts = getPostsByFollowings($_SESSION['user']['id'], $pdo); ?>
 
+<ul class="error-container">
+<?php foreach ($successes as $success) : ?>
+    <li class="messages">&#10003; <?php echo $success ?></li>
+<?php endforeach ?>
+</ul>
+
 <article>
     <?php foreach ($posts as $post) : ?>
         <?php $id = $post['user_id'];
@@ -127,14 +134,17 @@
                     <h6 class="comment-<?= $post['post_id']; ?>"><?= $post['post_text'] ?></h6>
                 </div>
             <?php endif; ?>
-            <?php if($comments!==[]) : ?>
                 <?php foreach ($comments as $comment) : ?>
                 <div class="comment-box">
                     <h5 class="comment-user"><?= $comment['username']; ?></h5>
-                    <h6 class="comment-<?= $comment['comment_id']; ?>"><?= $comment['comment_text']; ?></h6>
+                    <h6 class="comment-<?= $comment['comment_id']; ?>"><?= $comment['comment_text']; ?>
+                    <form action="/app/posts/deleteComment.php?comment_id=<?php echo $comment['comment_id']; ?>" method="post">
+                    <?php if ($comment['user_id'] === $_SESSION['user']['id']) : ?>
+                        <button type="submit" class="" onclick="return confirm('Are you sure you want to delete this comment?')">Delete comment</button>
+                    <?php endif; ?>
+                </form></h6>
                 </div>
                 <?php endforeach; ?>
-            <?php endif; ?>
             </div>
         </div> 
     <?php endforeach; ?>

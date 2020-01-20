@@ -2,7 +2,7 @@
 // Load the default application setup.
 require __DIR__.'/../app/autoload.php';
 require __DIR__.'/../app/users.php';
-require __DIR__.'/../app/errors.php';
+require __DIR__.'/../app/messages.php';
 
 ?>
 <!DOCTYPE html>
@@ -18,7 +18,7 @@ require __DIR__.'/../app/errors.php';
     <link rel="stylesheet" href="/assets/styles/main.css">
     <link rel="stylesheet" href="/assets/styles/fonts.css">
     <link rel="stylesheet" href="/assets/styles/nav.css">
-    <link rel="stylesheet" href="/assets/styles/errors.css">
+    <link rel="stylesheet" href="/assets/styles/messages.css">
     <?php require __DIR__."/../assets/styles/body.php"; ?>
     <?php if($_SERVER['REQUEST_URI'] === '/' || $_SERVER['REQUEST_URI'] === '/index.php') : 
     require __DIR__."/../assets/styles/index.php";
