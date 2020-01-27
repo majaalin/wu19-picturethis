@@ -87,6 +87,9 @@ const commentImgs = document.querySelectorAll(".comment-img");
 commentImgs.forEach(commentImg => {
   const ID = commentImg.id;
 
+  const commentbox = document.querySelectorAll(".comment-box");
+  const commentId = commentbox.id;
+
   commentImg.addEventListener("click", event => {
     const commentsDiv = document.querySelector(`.comments-container-${ID}`);
     const usernameElement = document.querySelector(".dummy-div");
@@ -109,9 +112,6 @@ commentImgs.forEach(commentImg => {
     commentsDiv.appendChild(div);
     updateField.focus();
 
-    const commentbox = document.querySelectorAll(".comment-box");
-    const commentId = commentbox.id;
-
     editForm.addEventListener("submit", event => {
       event.preventDefault();
       const formData = new FormData(editForm);
@@ -121,18 +121,18 @@ commentImgs.forEach(commentImg => {
       })
         .then(response => response.json())
         .then(comment => {
+          const commentId = comment.commentId;
+          const commentText = comment.commentText;
           div.innerHTML = "";
           if (comment.commentText !== "") {
             const h5 = document.createElement("h5");
-            h5.classList.add("comment-user");
+            h5.classList.add(`${commentId}`);
             h5.innerHTML = username;
             div.appendChild(h5);
             const h6 = document.createElement("h6");
-            h6.classList.add(`comment-${ID}`);
+            h6.classList.add(`${commentId}`);
             h6.innerHTML = comment.commentText;
             div.appendChild(h6);
-
-            const commentId = comment.commentId;
 
             const editComment = document.createElement("form");
             editComment.classList.add("edit-comment-form");
@@ -146,8 +146,8 @@ commentImgs.forEach(commentImg => {
             deleteComment.classList.add("delete-comment-form");
             deleteComment.method = "post";
             deleteComment.innerHTML = `
-            <input type="hidden" name="comment_id" value="${commentId}">
-            <button class="delete-comment" type="submit">Delete</button>`;
+                  <input type="hidden" name="comment_id" value="${commentId}">
+                  <button class="delete-comment" type="submit">Delete</button>`;
             div.appendChild(deleteComment);
 
             deleteComment.addEventListener("submit", event => {
@@ -165,48 +165,89 @@ commentImgs.forEach(commentImg => {
                 removeComment();
               });
             });
+
+            var commentUser = document.querySelector(".comment-user");
+            var editCommentButton = document.querySelector(".edit-comment");
+            var deleteCommentButton = document.querySelector(
+              ".delete-comment-form"
+            );
+
+            editComment.addEventListener("submit", event => {
+              event.preventDefault();
+              h6.style.display = "none";
+              h5.style.display = "none";
+              editCommentButton.style.display = "none";
+              deleteCommentButton.style.display = "none";
+              const existingComment = h6.innerHTML;
+              const updateComment = document.createElement("form");
+              updateComment.classList.add("edit-post-form");
+              updateComment.method = "post";
+              updateComment.innerHTML = `<input type="hidden" name="comment-id" value="${commentId}">
+                  <input id="updateField" type="text" name="comment-text" value="${existingComment}">
+                  <button class="edit-comment-button" type="submit">Update comment</button>`;
+              div.appendChild(updateComment);
+              updateComment.focus();
+
+              updateComment.addEventListener("submit", event => {
+                event.preventDefault();
+                const formData = new FormData(updateComment);
+                fetch("/app/posts/editComment.php", {
+                  method: "POST",
+                  body: formData
+                })
+                  .then(response => response.json())
+                  .then(changedComments => {
+                    updateComment.style.display = "none";
+                    h6.innerHTML = changedComments.newCommentText;
+                    h6.style.display = "inline-block";
+                    h5.innerHTML = username;
+                    h5.style.display = "inline-block";
+                    editCommentButton.style.display = "inline-block";
+                    deleteCommentButton.style.display = "inline-block";
+                  });
+              });
+            });
           }
         });
     });
-  });
-});
-
-function removeElement(id) {
-  var elem = document.getElementsByClassName(id);
-  return elem.parentNode.removeChild(elem);
-}
-
-// This section of code is for when a post is liked or unliked
-let likeIMGs = document.querySelectorAll(".like-img");
-likeIMGs.forEach(likeIMG => {
-  const ID = likeIMG.id;
-  likeIMG.addEventListener("click", event => {
-    event.preventDefault();
-    const postIdDiv = document.querySelector(".dummy-post-div");
-    const postID = postIdDiv.innerHTML;
-    let liked = true;
-    if (likeIMG.src.includes("/assets/icons/like_inactive.svg")) {
-      likeIMG.src = "/assets/icons/like_active.png";
-    } else {
-      likeIMG.src = "/assets/icons/like_inactive.svg";
-      liked = false;
+    function removeElement(id) {
+      var elem = document.getElementsByClassName(id);
+      return elem.parentNode.removeChild(elem);
     }
-    const likeForm = document.createElement("form");
-    likeForm.method = "post";
-    likeForm.innerHTML = `<input type="hidden" name="post-id" value="${ID}">
+
+    // This section of code is for when a post is liked or unliked
+    let likeIMGs = document.querySelectorAll(".like-img");
+    likeIMGs.forEach(likeIMG => {
+      const ID = likeIMG.id;
+      likeIMG.addEventListener("click", event => {
+        event.preventDefault();
+        const postIdDiv = document.querySelector(".dummy-post-div");
+        const postID = postIdDiv.innerHTML;
+        let liked = true;
+        if (likeIMG.src.includes("/assets/icons/like_inactive.svg")) {
+          likeIMG.src = "/assets/icons/like_active.png";
+        } else {
+          likeIMG.src = "/assets/icons/like_inactive.svg";
+          liked = false;
+        }
+        const likeForm = document.createElement("form");
+        likeForm.method = "post";
+        likeForm.innerHTML = `<input type="hidden" name="post-id" value="${ID}">
         <input type="hidden" name="liked-user-id" value="${postID}">`;
-    if (liked) {
-      const likeFormData = new FormData(likeForm);
-      fetch("app/posts/like.php", {
-        method: "POST",
-        body: likeFormData
+        if (liked) {
+          const likeFormData = new FormData(likeForm);
+          fetch("app/posts/like.php", {
+            method: "POST",
+            body: likeFormData
+          });
+        } else {
+          const removeLikeFormData = new FormData(likeForm);
+          fetch("app/posts/removeLike.php", {
+            method: "POST",
+            body: removeLikeFormData
+          });
+        }
       });
-    } else {
-      const removeLikeFormData = new FormData(likeForm);
-      fetch("app/posts/removeLike.php", {
-        method: "POST",
-        body: removeLikeFormData
-      });
-    }
+    });
   });
 });

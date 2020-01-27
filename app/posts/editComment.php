@@ -18,7 +18,7 @@ if(isset($_POST['comment-id'],$_POST['comment-text'])) {
 
     $changedComments = [
         'commentId' => $commentId,
-        'comentText' => $newCommentText,
+        'newCommentText' => $newCommentText,
     ];
 
     $changedComments = json_encode($changedComments);

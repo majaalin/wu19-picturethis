@@ -346,6 +346,10 @@ hr {
   border: 1px solid #555;
 }
 
+.hidden {
+  display: bl;
+}
+
 @media only screen and (min-width: 1000px) and (-webkit-min-device-pixel-ratio: 1) {
   .like-comment {
     width: 80px;
