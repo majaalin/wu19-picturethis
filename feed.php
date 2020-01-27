@@ -47,6 +47,7 @@
             <?php endif; ?>
         </div>
     </div>
+
     <?php foreach ($posts as $post) : 
         $liked = getLikesByPost($post["post_id"], $pdo);
         $comments = getComments($post["post_id"], $pdo); ?>
@@ -80,6 +81,11 @@
                     <div class="comment-box">
                         <h5 class="comment-user"><?= $comment['username']; ?></h5>
                         <h6 class="comment-<?= $comment['comment_id']; ?>"><?= $comment['comment_text']; ?></h6>
+                        <?php if ($comment['user_id'] === $_SESSION['user']['id']) : ?>
+                        <form class="delete-comment-form" action="app/posts/deleteComment.php" method="post">
+                        <input type="hidden" name="comment_id" value="<?php echo $comment['comment_id'] ?>">
+                        <button class="delete-comment" type="submit">X</button>
+                        <?php endif; ?>
                     </div>
                     <?php endforeach; ?>
                 <?php endif; ?>
@@ -90,6 +96,12 @@
 
 <?php } else {
     // $posts = getPostsByFollowings($_SESSION['user']['id'], $pdo); ?>
+
+<ul class="error-container">
+<?php foreach ($successes as $success) : ?>
+    <li class="messages">&#10003; <?php echo $success ?></li>
+<?php endforeach ?>
+</ul>
 
 <article>
     <?php foreach ($posts as $post) : ?>
@@ -103,7 +115,7 @@
         <div class="dummy-post-div"><?= $id; ?></div> 
         <div class = "<?= $username; ?>-post post">
             <div class = 'post-header'>
-                <form id="<?= $post['post_id']; ?>" action="app/posts/searchUser.php" method="post">
+                <form id="<?= $post['post_id']; ?>" action="app/users/searchUser.php" method="post">
                     <input type="hidden" name="profileID" value="<?= $id; ?>">
                     <input type="hidden" name="return-url" value="/feed.php">
                     <div onclick="document.getElementById('<?= $post['post_id']; ?>').submit();" class = "post-profile-header">
@@ -127,14 +139,17 @@
                     <h6 class="comment-<?= $post['post_id']; ?>"><?= $post['post_text'] ?></h6>
                 </div>
             <?php endif; ?>
-            <?php if($comments!==[]) : ?>
                 <?php foreach ($comments as $comment) : ?>
-                <div class="comment-box">
+                <div class="comment-box" data-id="<?php $comment['comment_id'] ?>">
                     <h5 class="comment-user"><?= $comment['username']; ?></h5>
                     <h6 class="comment-<?= $comment['comment_id']; ?>"><?= $comment['comment_text']; ?></h6>
+                    <?php if ($comment['user_id'] === $_SESSION['user']['id']) : ?>
+                        <form class="delete-comment-form" action="app/posts/deleteComment.php" method="post">
+                            <input type="hidden" name="comment_id" value="<?php echo $comment['comment_id'] ?>">
+                            <button class="delete-comment" type="submit">Delete</button>
+                    <?php endif; ?>
                 </div>
                 <?php endforeach; ?>
-            <?php endif; ?>
             </div>
         </div> 
     <?php endforeach; ?>

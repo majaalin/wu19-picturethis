@@ -1,148 +1,148 @@
-
 .container {
-    background: white;
+  background: white;
+  min-height: 100vh;
 }
 
 nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 8vh;
-    z-index: 1;
-    overflow-x: hidden;
-    border-bottom: 1px solid black;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 8vh;
+  z-index: 1;
+  overflow-x: hidden;
+  border-bottom: 1px solid black;
 }
 
 .navbar-brand {
-    font-family: BeautifulPeople;
-    font-size: 30px;
-    padding-bottom: 0;
+  font-family: BeautifulPeople;
+  font-size: 30px;
+  padding-bottom: 0;
 }
 
 .navbar {
-    position: fixed;
-    width: 100%;
+  position: fixed;
+  width: 100%;
 }
 
 .navbar-fixed {
-    width: 100%;
+  width: 100%;
 }
 
 .menu-large {
-    display: block;
-    z-index: 3;
+  display: block;
+  z-index: 3;
 }
 
 .navbar-nav {
-    position: absolute;
-    right: 0px;
-    height: 28vh;
-    top: 0vh;
-    background-color: #f8f9fa;
-    display: none;
-    width: 50vw;
-    overflow-x: hidden;
-    flex-direction: column;
-    align-items: flex-start;
-    width: 50%;
-    transform: translateX(100%);
-    transition: transform 0.2s ease forwards;
-    padding-left: 20px;
-    z-index: 1;
+  position: absolute;
+  right: 0px;
+  height: 28vh;
+  top: 0vh;
+  background-color: #f8f9fa;
+  display: none;
+  width: 50vw;
+  overflow-x: hidden;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 50%;
+  transform: translateX(100%);
+  transition: transform 0.2s ease forwards;
+  padding-left: 20px;
+  z-index: 1;
 }
 
 .navbar-nav a {
-    text-decoration: none;
-    letter-spacing: 2px;
+  text-decoration: none;
+  letter-spacing: 2px;
 }
 
 .navbar-nav li {
-    list-style: none;
-    margin: 10px 0;
-    opacity: 0;
+  list-style: none;
+  margin: 10px 0;
+  opacity: 0;
 }
 
 .navbar-nav li:first-child {
-    margin: 40px 0 10px 0;
+  margin: 40px 0 10px 0;
 }
 
 .navbar-nav li:last-child {
-    margin: 10px 0 10% 0;
+  margin: 10px 0 10% 0;
 }
 
 .nav-active {
-    display: flex;
-    transform: translateX(0%);
-    position: fixed;
-    overflow-x: hidden;
+  display: flex;
+  transform: translateX(0%);
+  position: fixed;
+  overflow-x: hidden;
 }
 
 .menu-large img {
-    width: 31px;
-    height: auto;
-    background-color: transparent;
-    z-index: 3;
+  width: 31px;
+  height: auto;
+  background-color: transparent;
+  z-index: 3;
 }
 
 .translate {
-    transform: translateX(0vw);
+  transform: translateX(0vw);
 }
 
 @keyframes navLinkFade {
-    from {
-        opacity: 0;
-        transform: translateX(200px);
-    }
+  from {
+    opacity: 0;
+    transform: translateX(200px);
+  }
 
-    to {
-        opacity: 1;
-        transform: translateX(10px);
-    }
+  to {
+    opacity: 1;
+    transform: translateX(10px);
+  }
 }
 
 @keyframes navFade {
-    from {
-        opacity: 0;
-        transform: translateX(100%);
-    }
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
 
-    to {
-        opacity: 1;
-        transform: translateX(0%);
-    }
+  to {
+    opacity: 1;
+    transform: translateX(0%);
+  }
 }
 
 .desktop-nav {
-    display: none;
+  display: none;
 }
 
 @media only screen and (min-width: 768px) and (-webkit-min-device-pixel-ratio: 1) {
-    .mobile-nav {
-        display: none;
-    }
+  .mobile-nav {
+    display: none;
+  }
 
-    .desktop-nav {
-        display: flex;
-        text-decoration: none;
-        letter-spacing: 2px;
-        list-style: none;
-        margin: 6px 0;
-        color: black;
-    }
+  .desktop-nav {
+    display: flex;
+    text-decoration: none;
+    letter-spacing: 2px;
+    list-style: none;
+    margin: 6px 0;
+    color: black;
+  }
 
-    .desktop-nav a {
-        color: black;
-    }
+  .desktop-nav a {
+    color: black;
+  }
 
-    .desktop-nav a:hover {
-        color: green;
-    }
+  .desktop-nav a:hover {
+    color: green;
+  }
 
-    .delete-account {
-        display: none;
-    }
+  .delete-account {
+    display: none;
+  }
 
-    .navbar {
-        justify-content: space-between;
-    }
+  .navbar {
+    justify-content: space-between;
+  }
 }
