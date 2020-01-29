@@ -29,6 +29,26 @@ h6 {
   font-size: small;
 }
 
+.comment h6 {
+  width: 50vw;
+  margin-left: 10px;
+  margin-top: 0;
+}
+
+.update-comment {
+  width: 95vw;
+  max-width: 538px;
+  margin-top: 8px;
+  height: 40px;
+  position: absolute;
+  z-index: 2;
+  background-color: white;
+}
+
+.delete-comment {
+  margin-left: 10px;
+}
+
 .following {
   color: forestgreen;
   margin-right: 20px;
@@ -93,10 +113,12 @@ h5 {
 }
 
 button {
-  padding: 0 15px;
-  border: 1px black solid;
+  border: 1px darkgrey solid;
   border-radius: 5px;
-  margin: 8px 0;
+  margin-top: 2px;
+  background-color: rgb(248, 249, 250);
+  color: #333333;
+  outline: none !important;
 }
 
 .submit-button {
@@ -190,11 +212,17 @@ button {
   padding: 2px;
 }
 
+.updateField {
+  width: 70vw;
+  margin-right: 8px;
+  font-size: 14px;
+  background-color: white;
+}
+
 .edit-image-form {
   display: flex;
   justify-content: flex-end;
   flex-grow: 1;
-  margin-bottom: 4px;
 }
 
 .edit-post-form {
@@ -219,7 +247,6 @@ button {
   justify-content: space-between;
   align-items: center;
   line-height: normal;
-  width: 70vw;
   flex-wrap: wrap;
 }
 
@@ -228,6 +255,17 @@ button {
   justify-content: space-between;
   align-items: center;
   line-height: normal;
+  margin-top: 10px;
+  height: 20px;
+}
+
+.comment button {
+  font-size: 14px;
+  margin-top: 2px;
+}
+
+.comment h5 {
+  font-size: 14px;
 }
 
 .edit-post-form {
@@ -235,12 +273,12 @@ button {
   justify-content: flex-start;
   align-items: center;
   line-height: normal;
-  margin: 10px;
 }
 
 .update-comment-form {
   position: absolute;
   z-index: 2;
+  right: 10px;
 }
 
 .comment-box .comment-box {
@@ -272,6 +310,8 @@ input {
 
 .comment {
   padding-bottom: 1px;
+  display: flex;
+  justify-content: space-between;
 }
 
 .post-pop-up-text {
@@ -379,6 +419,13 @@ hr {
   display: none;
 }
 
+.updateField {
+  border: 0;
+  border-bottom: 1px solid #333333;
+  margin-right: 10px;
+  outline: none !important;
+}
+
 @media only screen and (min-width: 1000px) and (-webkit-min-device-pixel-ratio: 1) {
   .like-comment {
     width: 80px;
@@ -397,6 +444,14 @@ hr {
   }
 
   .container {
+    width: 55%;
+  }
+
+  .updateField {
+    width: 55%;
+  }
+
+  .update-comment {
     width: 55%;
   }
 

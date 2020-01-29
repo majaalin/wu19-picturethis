@@ -106,7 +106,7 @@ commentImgs.forEach(commentImg => {
     editForm.classList.add("edit-post-form");
     editForm.method = "post";
     editForm.innerHTML = `<input type="hidden" name="post-id" value="${ID}">
-        <input id="updateField" type="text" name="comment-text">
+        <input id="updateField" class="updateField" type="text" name="comment-text">
         <button class="edit-comment-button" type="submit">Post</button>`;
     div.appendChild(editForm);
     commentsDiv.appendChild(div);
@@ -149,11 +149,11 @@ commentImgs.forEach(commentImg => {
               editComment.style.display = "inline";
               const existingComment = h6.innerHTML;
               const updateComment = document.createElement("form");
-              updateComment.classList.add("update-comment-form");
+              updateComment.classList.add("update-comment");
               updateComment.method = "post";
               updateComment.innerHTML = `<input type="hidden" name="comment-id" value="${commentId}">
-                  <input id="updateField" type="text" name="comment-text" value="${existingComment}">
-                  <button class="update-comment-form" type="submit">Update comment</button>`;
+                  <input id="updateField" class="updateField" type="text" name="comment-text" value="${existingComment}">
+                  <button class="update-comment-form" type="submit">Update</button>`;
               div.appendChild(updateComment);
               updateComment.focus();
 
@@ -174,31 +174,31 @@ commentImgs.forEach(commentImg => {
                   });
               });
             });
+          }
 
-            const deleteComment = document.createElement("form");
-            deleteComment.classList.add("delete-comment-form");
-            deleteComment.method = "post";
-            deleteComment.innerHTML = `
+          const deleteComment = document.createElement("form");
+          deleteComment.classList.add("delete-comment-form");
+          deleteComment.method = "post";
+          deleteComment.innerHTML = `
                   <input type="hidden" name="comment_id" value="${commentId}">
                   <button id="edit-comment-button" class="${commentId}" type="submit">Delete</button>`;
-            div.appendChild(deleteComment);
+          div.appendChild(deleteComment);
 
-            deleteComment.addEventListener("submit", event => {
-              event.preventDefault();
-              const formData = new FormData(deleteComment);
-              fetch("/app/posts/deleteComment.php", {
-                method: "POST",
-                body: formData
-              }).then(removeComment => {
-                function removeComment() {
-                  const target = event.target;
-                  const parent = target.parentElement;
-                  parent.parentNode.removeChild(parent);
-                }
-                removeComment();
-              });
+          deleteComment.addEventListener("submit", event => {
+            event.preventDefault();
+            const formData = new FormData(deleteComment);
+            fetch("/app/posts/deleteComment.php", {
+              method: "POST",
+              body: formData
+            }).then(removeComment => {
+              function removeComment() {
+                const target = event.target;
+                const parent = target.parentElement;
+                parent.parentNode.removeChild(parent);
+              }
+              removeComment();
             });
-          }
+          });
         });
     });
   });

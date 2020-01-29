@@ -140,10 +140,14 @@
                 </div>
             <?php endif; ?>
                 <?php foreach ($comments as $comment) : ?>
-                <div class="comment-box" data-id="<?php $comment['comment_id'] ?>">
-                    <h5 class="comment-user"><?= $comment['username']; ?></h5>
-                    <h6 class="comment-<?= $comment['comment_id']; ?>"><?= $comment['comment_text']; ?></h6>
+                <div class="comment">
+                    <h5 class="<?= $comment['comment_id']; ?>"><?= $comment['username']; ?></h5>
+                    <h6 class="<?= $comment['comment_id']; ?>"><?= $comment['comment_text']; ?></h6>
                     <?php if ($comment['user_id'] === $_SESSION['user']['id']) : ?>
+                    <form class="edit-comment-form" method="post">
+                    <input type="hidden" name="comment_id" value="<?= $comment['comment_id']; ?>">
+                    <button class="<?= $comment['comment_id']; ?>" type="submit">Edit</button>
+                    </form>
                         <form class="delete-comment-form" action="app/posts/deleteComment.php" method="post">
                             <input type="hidden" name="comment_id" value="<?php echo $comment['comment_id'] ?>">
                             <button class="delete-comment" type="submit">Delete</button>
@@ -156,6 +160,7 @@
 </article>
 
 <?php } ?>
+
 
 <?php unset($_SESSION['profileID']); ?>
 <?php require __DIR__.'/views/footer.php'; ?>
