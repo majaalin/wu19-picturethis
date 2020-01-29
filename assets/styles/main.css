@@ -216,8 +216,37 @@ button {
 
 .comment-box {
   display: flex;
-  align-items: flex-start;
   justify-content: space-between;
+  align-items: center;
+  line-height: normal;
+  width: 70vw;
+  flex-wrap: wrap;
+}
+
+.comment {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  line-height: normal;
+}
+
+.edit-post-form {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  line-height: normal;
+  margin: 10px;
+}
+
+.update-comment-form {
+  position: absolute;
+  z-index: 2;
+}
+
+.comment-box .comment-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   line-height: normal;
 }
 
@@ -347,7 +376,7 @@ hr {
 }
 
 .hidden {
-  display: bl;
+  display: none;
 }
 
 @media only screen and (min-width: 1000px) and (-webkit-min-device-pixel-ratio: 1) {
